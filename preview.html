@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>platform-design — preview</title>
+
+<!--
+  Imports the real tokens.css and controls.css rather than copies of them, so
+  this page fails when they do. Open it after any change; it is the cheapest
+  check there is, and the one most likely to catch something contrast.py can't.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="controls.css">
+
+<style>
+  /* Page scaffolding only — everything below the masthead is design-language CSS. */
+  body { margin: 0; }
+  .page { max-width: 1060px; margin: 0 auto; padding: 0 var(--rz-space-6) var(--rz-space-16); }
+  .masthead { padding: var(--rz-space-12) 0 var(--rz-space-6); border-bottom: 1px solid var(--rz-rule-sig); }
+  .masthead h1 { font-family: var(--rz-font-figure); font-weight: 500; font-size: 40px; line-height: 1.1; margin: 0 0 var(--rz-space-2); }
+  .masthead p { margin: 0; color: var(--rz-ink-2); max-width: 62ch; }
+  section { padding: var(--rz-space-12) 0 0; }
+  section > h2 { font-family: var(--rz-font-figure); font-weight: 500; font-size: 26px; margin: 0 0 var(--rz-space-4); }
+  .bay { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--rz-space-4); }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: var(--rz-space-2); }
+  .sw { border: 1px solid var(--rz-rule); border-radius: var(--rz-radius-sm); overflow: hidden; }
+  .sw i { display: block; height: 40px; }
+  .sw span { display: block; padding: var(--rz-space-1) var(--rz-space-2) var(--rz-space-2); font-family: var(--rz-font-meta); font-size: var(--rz-text-meta); color: var(--rz-ink-2); }
+  .cells { display: flex; gap: var(--rz-space-4); flex-wrap: wrap; }
+  .cell { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+  .cell-note { font-family: var(--rz-font-meta); font-size: var(--rz-text-meta); color: var(--rz-ink-3); text-align: center; margin: var(--rz-space-2) 0 0; }
+  .toggle { position: fixed; top: var(--rz-space-4); right: var(--rz-space-4); z-index: var(--rz-z-nav); }
+</style>
+</head>
+
+<body class="rz-app">
+<button class="rz-btn rz-btn--secondary toggle" type="button" id="theme">Toggle theme</button>
+
+<div class="page">
+
+  <header class="masthead">
+    <h1>platform-design</h1>
+    <p>Every element below is styled by <code>tokens.css</code> and <code>controls.css</code> as
+    imported, not by this page. If something here looks wrong, the library is wrong.</p>
+  </header>
+
+  <section>
+    <h2>Colour</h2>
+    <div class="swatches">
+      <div class="sw"><i style="background:var(--rz-ground)"></i><span>ground</span></div>
+      <div class="sw"><i style="background:var(--rz-surface)"></i><span>surface</span></div>
+      <div class="sw"><i style="background:var(--rz-rule)"></i><span>rule</span></div>
+      <div class="sw"><i style="background:var(--rz-rule-sig)"></i><span>rule-sig</span></div>
+      <div class="sw"><i style="background:var(--rz-control)"></i><span>control</span></div>
+      <div class="sw"><i style="background:var(--rz-ink)"></i><span>ink</span></div>
+      <div class="sw"><i style="background:var(--rz-ink-2)"></i><span>ink-2</span></div>
+      <div class="sw"><i style="background:var(--rz-ink-3)"></i><span>ink-3</span></div>
+      <div class="sw"><i style="background:var(--rz-accent)"></i><span>accent</span></div>
+      <div class="sw"><i style="background:var(--rz-accent-tint)"></i><span>accent-tint</span></div>
+      <div class="sw"><i style="background:var(--rz-good)"></i><span>good</span></div>
+      <div class="sw"><i style="background:var(--rz-warn)"></i><span>warn</span></div>
+      <div class="sw"><i style="background:var(--rz-crit)"></i><span>crit</span></div>
+      <div class="sw"><i style="background:var(--rz-ramp-1)"></i><span>ramp-1</span></div>
+      <div class="sw"><i style="background:var(--rz-ramp-2)"></i><span>ramp-2</span></div>
+      <div class="sw"><i style="background:var(--rz-ramp-3)"></i><span>ramp-3</span></div>
+      <div class="sw"><i style="background:var(--rz-ramp-4)"></i><span>ramp-4</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Type and figures</h2>
+    <div class="bay">
+      <div class="rz-card">
+        <p class="rz-label">This quarter</p>
+        <p class="rz-figure">21 <span class="rz-figure__unit">/ 24</span></p>
+        <p class="rz-small" style="margin:var(--rz-space-2) 0 0">14 working days left</p>
+      </div>
+      <div class="rz-card">
+        <p class="rz-label">Next 30 days</p>
+        <p class="rz-figure">2,845<span class="rz-figure__unit">.79</span></p>
+        <p class="rz-small" style="margin:var(--rz-space-2) 0 0">5 payments</p>
+      </div>
+      <div class="rz-card">
+        <p class="rz-label">Utility metadata</p>
+        <p class="rz-meta">v1.4.0 &middot; b4c37df</p>
+        <p class="rz-small" style="margin:var(--rz-space-2) 0 0">System mono, ink-3.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="rz-card">
+      <div class="rz-row">
+        <button class="rz-btn" type="button">Save</button>
+        <button class="rz-btn rz-btn--secondary" type="button">Cancel</button>
+        <button class="rz-btn rz-btn--ghost" type="button">Dismiss</button>
+        <button class="rz-btn rz-btn--danger" type="button">Delete</button>
+      </div>
+      <div class="rz-row" style="margin-top:var(--rz-space-3)">
+        <button class="rz-btn rz-btn--sm" type="button">Small</button>
+        <button class="rz-btn" type="button">Default</button>
+        <button class="rz-btn rz-btn--lg" type="button">Touch target</button>
+        <button class="rz-btn" type="button" disabled>Disabled</button>
+        <button class="rz-btn rz-btn--secondary" type="button" disabled>Disabled</button>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">Tab through these — the focus ring
+      is identical on every one, and sits outside the element.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fields</h2>
+    <div class="bay">
+      <div class="rz-card">
+        <div class="rz-stack">
+          <div class="rz-field-group">
+            <label class="rz-field-label" for="f1">Bill name</label>
+            <input class="rz-field" id="f1" value="Rent">
+          </div>
+          <div class="rz-field-group">
+            <label class="rz-field-label" for="f2">Amount</label>
+            <input class="rz-field" id="f2" value="-40.00" aria-invalid="true" aria-describedby="f2e">
+            <p class="rz-field-error" id="f2e"><span aria-hidden="true">&#9888;</span> Amount must be greater than zero.</p>
+          </div>
+          <div class="rz-field-group">
+            <label class="rz-field-label" for="f3">Category</label>
+            <select class="rz-field" id="f3">
+              <option>Housing</option><option>Utilities</option><option>Transport</option>
+            </select>
+          </div>
+          <div class="rz-field-group">
+            <label class="rz-field-label" for="f4">Not editable</label>
+            <input class="rz-field" id="f4" value="Locked" disabled>
+          </div>
+          <label class="rz-check-row"><input class="rz-check" type="checkbox" checked> Show closed bills</label>
+        </div>
+      </div>
+      <div class="rz-card">
+        <p class="rz-label">Loading</p>
+        <div class="rz-stack" aria-busy="true">
+          <div class="rz-skeleton" style="width:45%"></div>
+          <div class="rz-skeleton rz-skeleton--figure" style="width:70%"></div>
+          <div class="rz-skeleton" style="width:60%"></div>
+        </div>
+      </div>
+      <div class="rz-card">
+        <div class="rz-empty">
+          <p class="rz-empty__title">No bills yet.</p>
+          <p class="rz-empty__hint">Add the first one to see what is coming up.</p>
+          <div class="rz-empty__action"><button class="rz-btn" type="button">Add a bill</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Status</h2>
+    <div class="rz-card">
+      <div class="rz-row">
+        <span class="rz-badge rz-badge--good"><span aria-hidden="true">&#10003;</span> On track</span>
+        <span class="rz-badge rz-badge--caution"><span aria-hidden="true">&#9650;</span> Getting tight</span>
+        <span class="rz-badge rz-badge--critical"><span aria-hidden="true">&#9888;</span> No margin</span>
+        <span class="rz-badge rz-badge--neutral"><span aria-hidden="true">&#9675;</span> Just started</span>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">The icon shape and the label are the
+      encoding. Colour reinforces — no green/amber/red trio stays distinguishable under
+      deuteranopia at legible contrast.</p>
+
+      <div class="rz-stack" style="margin-top:var(--rz-space-4)">
+        <div class="rz-alert rz-alert--critical" role="alert">
+          <span class="rz-alert__icon" aria-hidden="true">&#9888;</span>
+          <div class="rz-alert__body">
+            <p><strong>That window is not one the server will answer.</strong></p>
+            <p class="rz-small">Check the dates — the end must not precede the start.</p>
+          </div>
+        </div>
+        <div class="rz-alert rz-alert--good">
+          <span class="rz-alert__icon" aria-hidden="true">&#10003;</span>
+          <div class="rz-alert__body"><p>Saved.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Table</h2>
+    <div class="rz-card">
+      <div class="rz-table-wrap">
+        <table class="rz-table">
+          <thead>
+            <tr><th>Date</th><th>Bill</th><th>Category</th><th class="rz-num">Amount</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sep&nbsp;01</td><td>Rent</td><td>Housing</td><td class="rz-num">2,150.00</td></tr>
+            <tr><td>Sep&nbsp;05</td><td>Car payment</td><td>Transport</td><td class="rz-num">412.88</td></tr>
+            <tr><td>Sep&nbsp;12</td><td>Electric</td><td>Utilities</td><td class="rz-num">138.42</td></tr>
+            <tr class="is-muted"><td>Sep&nbsp;15</td><td>Old gym <span class="rz-badge rz-badge--neutral">Closed</span></td><td>Health</td><td class="rz-num">0.00</td></tr>
+            <tr class="rz-total"><td colspan="3">4 payments</td><td class="rz-num">2,701.30</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>States — three zones, composable</h2>
+    <div class="rz-card">
+      <div class="cells">
+        <div><div class="rz-selectable cell">9</div><p class="cell-note">default</p></div>
+        <div><div class="rz-selectable cell is-current">9</div><p class="cell-note">current</p></div>
+        <div><div class="rz-selectable cell is-selected">9</div><p class="cell-note">selected</p></div>
+        <div><button class="rz-selectable cell" type="button" autofocus>9</button><p class="cell-note">focus (tab here)</p></div>
+        <div><div class="rz-selectable cell is-current is-selected">9</div><p class="cell-note">current +<br>selected</p></div>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-4)">Focus sits outside the box, selected
+      is on it, current is inside it — so all three can be true at once and each stays readable.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Navigation parts</h2>
+    <div class="bay">
+      <nav class="rz-nav" style="border-radius:var(--rz-radius-md)">
+        <div class="rz-nav-brand"><span style="width:22px;height:22px;border-radius:var(--rz-radius-sm);background:var(--rz-accent);flex-shrink:0"></span><span>RTO Tracker</span></div>
+        <a class="rz-nav-item" href="#0"><span class="rz-nav-item__label">Dashboard</span></a>
+        <a class="rz-nav-item" href="#0"><span class="rz-nav-item__label">Calendar</span></a>
+        <a class="rz-nav-item is-current" href="#0" aria-current="page"><span class="rz-nav-item__label">Settings</span></a>
+        <div class="rz-nav-foot"><p class="rz-meta" style="padding:0 var(--rz-space-2)">v1.4.0 &middot; b4c37df</p></div>
+      </nav>
+      <nav class="rz-nav rz-nav--collapsed" style="border-radius:var(--rz-radius-md);max-width:56px">
+        <div class="rz-nav-brand"><span style="width:22px;height:22px;border-radius:var(--rz-radius-sm);background:var(--rz-accent);flex-shrink:0"></span><span>RTO Tracker</span></div>
+        <a class="rz-nav-item" href="#0" aria-label="Dashboard"><span class="rz-nav-item__icon" aria-hidden="true">&#9632;</span><span class="rz-nav-item__label">Dashboard</span></a>
+        <a class="rz-nav-item is-current" href="#0" aria-label="Settings" aria-current="page"><span class="rz-nav-item__icon" aria-hidden="true">&#9679;</span><span class="rz-nav-item__label">Settings</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <section>
+    <h2>Elevation</h2>
+    <div class="bay">
+      <div class="rz-card" style="box-shadow:none;border-style:dashed"><p class="rz-label rz-label--bare">e0 flush</p><p class="rz-small">Table rows, inline groups</p></div>
+      <div class="rz-card"><p class="rz-label rz-label--bare">e1 raised</p><p class="rz-small">Cards, panels, nav</p></div>
+      <div class="rz-card" style="background:var(--rz-surface-2);box-shadow:var(--rz-shadow-2);border-color:var(--rz-elev-border)"><p class="rz-label rz-label--bare">e2 floating</p><p class="rz-small">Dropdowns, popovers</p></div>
+      <div class="rz-card" style="background:var(--rz-surface-3);box-shadow:var(--rz-shadow-3);border-color:var(--rz-elev-border)"><p class="rz-label rz-label--bare">e3 overlay</p><p class="rz-small">Modals, sheets</p></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // The same mechanism RTO's ThemeService uses — a class on <html>. tokens.css
+  // honours .dark, [data-theme="dark"] and prefers-color-scheme, so this page
+  // exercises the explicit-choice path in both directions.
+  const root = document.documentElement;
+  document.getElementById('theme').addEventListener('click', () => {
+    const dark = root.classList.contains('dark')
+      || (!root.classList.contains('light') && matchMedia('(prefers-color-scheme: dark)').matches);
+    root.classList.toggle('dark', !dark);
+    root.classList.toggle('light', dark);
+  });
+</script>
+</body>
+</html>

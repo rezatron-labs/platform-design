@@ -1,0 +1,100 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tailwind v4 bridge — optional, for apps that keep Tailwind for layout.
+
+   Only RTO Tracker needs this. Money Manager has no Tailwind and should not
+   import it.
+
+   What it does: maps Tailwind's colour namespace onto the design tokens, so
+   `bg-surface` and `var(--rz-surface)` resolve to the same value by
+   construction rather than by anyone remembering to keep them in step. That is
+   what fixes RTO's two-different-blues bug structurally — --color-primary was
+   #2563eb (Tailwind v3's blue-600) while `bg-blue-600` renders v4's #155dfc,
+   and both were called primary.
+
+   Import order matters. tokens.css must come first, or the var() references
+   below resolve to nothing:
+
+     @import "tailwindcss";
+     @import "@rezatron-labs/design/tokens.css";
+     @import "@rezatron-labs/design/tailwind-bridge.css";
+     @import "@rezatron-labs/design/controls.css";
+
+   Tailwind is for layout and spacing here — grid, flex, responsive breakpoints.
+   Colour and controls come from the design language. A raw `bg-blue-600` in a
+   template is a bug after this lands, not a style choice.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Surfaces and ink. Named by role, so a template reads `bg-surface` rather
+     than `bg-white` and stays correct in dark mode without a dark: variant. */
+  --color-ground:        var(--rz-ground);
+  --color-surface:       var(--rz-surface);
+  --color-surface-2:     var(--rz-surface-2);
+  --color-surface-3:     var(--rz-surface-3);
+
+  --color-rule:          var(--rz-rule);
+  --color-rule-sig:      var(--rz-rule-sig);
+  --color-control:       var(--rz-control);
+
+  --color-ink:           var(--rz-ink);
+  --color-ink-2:         var(--rz-ink-2);
+  --color-ink-3:         var(--rz-ink-3);
+
+  --color-accent:        var(--rz-accent);
+  --color-on-accent:     var(--rz-on-accent);
+  --color-accent-tint:   var(--rz-accent-tint);
+
+  --color-good:          var(--rz-good);
+  --color-good-bg:       var(--rz-good-bg);
+  --color-caution:       var(--rz-warn);
+  --color-caution-bg:    var(--rz-warn-bg);
+  --color-critical:      var(--rz-crit);
+  --color-critical-bg:   var(--rz-crit-bg);
+
+  /* The sequential ramp — a quantity, never a verdict. Kept out of the status
+     names on purpose so nobody reaches for `bg-good-bg` to mean "four hours". */
+  --color-ramp-1:        var(--rz-ramp-1);
+  --color-ramp-2:        var(--rz-ramp-2);
+  --color-ramp-3:        var(--rz-ramp-3);
+  --color-ramp-4:        var(--rz-ramp-4);
+
+  /* Spacing. Tailwind's numeric scale is redefined onto our nine steps, so
+     `p-3` is 12px and `p-5` no longer exists. Utilities that referenced the
+     dropped 6/10/20px values will fail loudly rather than silently rendering
+     something off-scale. */
+  --spacing-0:           var(--rz-space-0);
+  --spacing-1:           var(--rz-space-1);
+  --spacing-2:           var(--rz-space-2);
+  --spacing-3:           var(--rz-space-3);
+  --spacing-4:           var(--rz-space-4);
+  --spacing-6:           var(--rz-space-6);
+  --spacing-8:           var(--rz-space-8);
+  --spacing-12:          var(--rz-space-12);
+  --spacing-16:          var(--rz-space-16);
+
+  --radius-none:         var(--rz-radius-none);
+  --radius-sm:           var(--rz-radius-sm);
+  --radius-md:           var(--rz-radius-md);
+  --radius-lg:           var(--rz-radius-lg);
+  --radius-full:         var(--rz-radius-full);
+
+  --shadow-1:            var(--rz-shadow-1);
+  --shadow-2:            var(--rz-shadow-2);
+  --shadow-3:            var(--rz-shadow-3);
+
+  --font-ui:             var(--rz-font-ui);
+  --font-figure:         var(--rz-font-figure);
+  --font-meta:           var(--rz-font-meta);
+
+  --text-figure-lg:      var(--rz-text-figure-lg);
+  --text-figure:         var(--rz-text-figure);
+  --text-title:          var(--rz-text-title);
+  --text-body:           var(--rz-text-body);
+  --text-small:          var(--rz-text-small);
+  --text-label:          var(--rz-text-label);
+}
+
+/* RTO's ThemeService toggles `.dark` on <html>. tokens.css already honours that
+   selector, so this only teaches Tailwind's dark: variant the same rule — needed
+   for the handful of places a dark: utility is genuinely the clearest option. */
+@variant dark (&:where(.dark, .dark *));

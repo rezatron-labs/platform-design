@@ -1,0 +1,276 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Rezatron design tokens — Harbor (colour) + Almanac (character)
+
+   Values only. No markup opinions, no component styles. See controls.css.
+
+   Everything is prefixed --rz-. This is not decoration: Tailwind v4 defines
+   --color-blue-600 and friends as real custom properties, so an unprefixed
+   --color-primary would sit in the framework's own namespace and collide in a
+   way that is very hard to find.
+
+   Custom properties rather than Sass variables because Chart.js draws to canvas
+   and cannot read a class — only a resolved value via getComputedStyle:
+
+     getComputedStyle(document.documentElement).getPropertyValue('--rz-accent')
+
+   Every colour pairing here is verified by contrast.py. Change a value and run it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Light ────────────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+
+  /* Surfaces. surface-2 and surface-3 are identical to surface in light: there,
+     elevation is carried by the shadow, not by the fill. */
+  --rz-ground:            #f1f4f4;
+  --rz-surface:           #ffffff;
+  --rz-surface-2:         #ffffff;
+  --rz-surface-3:         #ffffff;
+
+  /* Two border roles, and they are not interchangeable. --rz-rule is decorative
+     and deliberately below 3:1. --rz-control bounds anything interactive and
+     must clear 3:1 (WCAG 1.4.11). --rz-rule-sig is the signature hairline that
+     sits under every label; it has to read, not merely divide. */
+  --rz-rule:              #dde3e4;
+  --rz-rule-sig:          #bcc8c9;
+  --rz-control:           #87969a;
+
+  /* Three ink levels, all of which clear 4.5:1. There is deliberately no fourth,
+     dimmer grey — that slot is what RTO fills with text-gray-400 at 2.6:1. */
+  --rz-ink:               #0f1a1d;
+  --rz-ink-2:             #52646a;
+  --rz-ink-3:             #64757b;
+
+  --rz-accent:            #2a4d9b;
+  --rz-on-accent:         #ffffff;
+  --rz-accent-tint:       #e5eaf3;
+
+  /* Status. Colour reinforces; it never encodes on its own. Every status must
+     also carry an icon whose shape differs and a text label — no green/amber/red
+     trio stays distinguishable under deuteranopia at legible contrast. */
+  --rz-good:              #0d6b62;
+  --rz-good-bg:           #ddeeec;
+  --rz-warn:              #a25b07;
+  --rz-warn-bg:           #fbeedd;
+  --rz-crit:              #8c1330;
+  --rz-crit-bg:           #fbe6ea;
+  --rz-info:              #2a4d9b;
+  --rz-info-bg:           #e5eaf3;
+
+  /* A quantity, never a verdict. Accent-hued so it cannot be mistaken for
+     "good", and monotonic in lightness so it survives without colour vision. */
+  --rz-ramp-1:            #e5ebf5;
+  --rz-ramp-2:            #b6c6e2;
+  --rz-ramp-3:            #7d99c9;
+  --rz-ramp-4:            #2a4d9b;
+
+  /* Interaction. Disabled is a token swap rather than opacity: fading a control
+     fades its border and shadow too, and a disabled control still needs a
+     visible boundary. */
+  --rz-hover:             #f1f4f4;
+  --rz-pressed:           #e6ebec;
+  --rz-disabled-fg:       #97a2a6;
+  --rz-disabled-bg:       #f1f4f4;
+  --rz-disabled-border:   #dde3e4;
+
+  /* Elevation. One scale, two mechanisms — in light a shadow darkens the ground
+     behind a surface. See the dark block for the other half. */
+  --rz-shadow-1:          0 1px 2px rgba(15, 26, 29, .10);
+  --rz-shadow-2:          0 4px 12px rgba(15, 26, 29, .12);
+  --rz-shadow-3:          0 12px 32px rgba(15, 26, 29, .18);
+  --rz-elev-border:       transparent;
+  --rz-scrim:             rgba(15, 26, 29, .45);
+}
+
+/* ── Dark ─────────────────────────────────────────────────────────────────── */
+/* Three states, not two: an explicit choice wins in either direction, and the
+   default "system" setting stamps nothing, so prefers-color-scheme decides.
+   Both .dark and [data-theme="dark"] are honoured — RTO's ThemeService toggles
+   a class on <html>, and it keeps working untouched. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --rz-ground:          #0e1416;
+    --rz-surface:         #171f22;
+    --rz-surface-2:       #1e282c;
+    --rz-surface-3:       #253138;
+
+    --rz-rule:            #283236;
+    --rz-rule-sig:        #3b4a4f;
+    --rz-control:         #5d6d72;
+
+    --rz-ink:             #e4ecee;
+    --rz-ink-2:           #94a5aa;
+    --rz-ink-3:           #83949a;
+
+    --rz-accent:          #79a6e8;
+    --rz-on-accent:       #0e1416;
+    --rz-accent-tint:     #232f3a;
+
+    --rz-good:            #3ec2b1;
+    --rz-good-bg:         #0f2b28;
+    --rz-warn:            #e8a552;
+    --rz-warn-bg:         #2f2211;
+    --rz-crit:            #f78ba0;
+    --rz-crit-bg:         #33161e;
+    --rz-info:            #79a6e8;
+    --rz-info-bg:         #232f3a;
+
+    --rz-ramp-1:          #16222e;
+    --rz-ramp-2:          #1f3450;
+    --rz-ramp-3:          #2b4a7d;
+    --rz-ramp-4:          #5d87c9;
+
+    --rz-hover:           #1e282c;
+    --rz-pressed:         #253138;
+    --rz-disabled-fg:     #626f74;
+    --rz-disabled-bg:     #1a2226;
+    --rz-disabled-border: #283236;
+
+    /* A drop shadow works by darkening the ground behind a surface. On a
+       near-black ground there is nothing left to darken, so it is dropped
+       entirely and elevation becomes a lighter surface plus a border. Each
+       surface step is only 1.11:1 from the one below — the border is what
+       makes it read, and it is not optional. */
+    --rz-shadow-1:        none;
+    --rz-shadow-2:        none;
+    --rz-shadow-3:        none;
+    --rz-elev-border:     #283236;
+    --rz-scrim:           rgba(0, 0, 0, .62);
+  }
+}
+
+:root.dark,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --rz-ground:            #0e1416;
+  --rz-surface:           #171f22;
+  --rz-surface-2:         #1e282c;
+  --rz-surface-3:         #253138;
+
+  --rz-rule:              #283236;
+  --rz-rule-sig:          #3b4a4f;
+  --rz-control:           #5d6d72;
+
+  --rz-ink:               #e4ecee;
+  --rz-ink-2:             #94a5aa;
+  --rz-ink-3:             #83949a;
+
+  --rz-accent:            #79a6e8;
+  --rz-on-accent:         #0e1416;
+  --rz-accent-tint:       #232f3a;
+
+  --rz-good:              #3ec2b1;
+  --rz-good-bg:           #0f2b28;
+  --rz-warn:              #e8a552;
+  --rz-warn-bg:           #2f2211;
+  --rz-crit:              #f78ba0;
+  --rz-crit-bg:           #33161e;
+  --rz-info:              #79a6e8;
+  --rz-info-bg:           #232f3a;
+
+  --rz-ramp-1:            #16222e;
+  --rz-ramp-2:            #1f3450;
+  --rz-ramp-3:            #2b4a7d;
+  --rz-ramp-4:            #5d87c9;
+
+  --rz-hover:             #1e282c;
+  --rz-pressed:           #253138;
+  --rz-disabled-fg:       #626f74;
+  --rz-disabled-bg:       #1a2226;
+  --rz-disabled-border:   #283236;
+
+  --rz-shadow-1:          none;
+  --rz-shadow-2:          none;
+  --rz-shadow-3:          none;
+  --rz-elev-border:       #283236;
+  --rz-scrim:             rgba(0, 0, 0, .62);
+}
+
+/* ── Theme-independent ────────────────────────────────────────────────────── */
+:root {
+  /* Type. Two webfonts and the system monospace stack — the mono is for utility
+     metadata (version strings, commit shas, timestamps) and does not justify a
+     third download. Load the two from the app's index.html:
+
+       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap">
+
+     Both have real fallbacks, because a webfont that fails to load must not take
+     the layout with it. */
+  --rz-font-ui:           "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --rz-font-figure:       "Newsreader", Georgia, "Times New Roman", serif;
+  --rz-font-meta:         ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --rz-text-figure-lg:    32px;
+  --rz-text-figure:       20px;
+  --rz-text-title:        15px;
+  --rz-text-body:         14px;
+  --rz-text-small:        12px;
+  --rz-text-label:        10px;
+  --rz-text-meta:         10px;
+
+  --rz-leading-body:      1.55;
+  --rz-leading-title:     1.3;
+  --rz-leading-figure:    1;
+  --rz-track-label:       .11em;
+
+  /* Nine steps on a 4px base. The gaps widen as values grow because the eye
+     notices 4->8 far more than 48->52. 6px, 10px and 20px are deliberately
+     absent — those cases are control heights, below. */
+  --rz-space-0:           2px;
+  --rz-space-1:           4px;
+  --rz-space-2:           8px;
+  --rz-space-3:           12px;
+  --rz-space-4:           16px;
+  --rz-space-6:           24px;
+  --rz-space-8:           32px;
+  --rz-space-12:          48px;
+  --rz-space-16:          64px;
+
+  /* Explicit, so padding never has to be nudged off the scale to land a control
+     on a sensible height. 44px is the comfortable touch target; 24px is the
+     WCAG 2.5.8 floor and nothing interactive may go below it. */
+  --rz-control-h-sm:      28px;
+  --rz-control-h:         32px;
+  --rz-control-h-lg:      44px;
+
+  /* Five, down from the seven RTO uses. Almanac separates with rules, so heavy
+     rounding fights the character. --rz-radius-full is for dots, avatars and
+     the gauge — badges use radius-sm. */
+  --rz-radius-none:       0;
+  --rz-radius-sm:         4px;
+  --rz-radius-md:         6px;
+  --rz-radius-lg:         10px;
+  --rz-radius-full:       9999px;
+
+  /* Focus. Never removed, never the same treatment as selected or current —
+     those three states have to be able to coexist on one element. */
+  --rz-focus-width:       2px;
+  --rz-focus-offset:      2px;
+
+  /* A scale with holes in it gets filled by invention, which is how RTO ended
+     up with z-[200] and z-[300]. e2/e3 and the upper layers have no user yet;
+     they exist so nobody has to invent one. */
+  --rz-z-base:            0;
+  --rz-z-raised:          10;
+  --rz-z-nav:             100;
+  --rz-z-floating:        200;
+  --rz-z-overlay:         300;
+  --rz-z-toast:           400;
+
+  --rz-duration-fast:     120ms;
+  --rz-duration:          180ms;
+  --rz-ease:              cubic-bezier(.2, 0, .2, 1);
+}
+
+/* Motion is a preference the OS already knows about. Honour it once, here, so
+   no component has to remember to. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rz-duration-fast:   0ms;
+    --rz-duration:        0ms;
+  }
+}

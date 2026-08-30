@@ -52,9 +52,29 @@ Cut tags when something stabilises, not on every edit.
 |---|---|
 | `GUIDE.md` | The decisions and the reasoning that produced them. Read this first. |
 | `tokens.css` | Values only — colour, type, space, radius, elevation, layering. |
-| `controls.css` | The common controls. Framework-free plain CSS. |
-| `preview.html` | Self-contained specimen page. Renders the real tokens. |
-| `contrast.py` | Runs the accessibility checks from GUIDE.md § 4. |
+| `controls.css` | The common controls. Framework-free plain CSS, `rz-` prefixed. |
+| `tailwind-bridge.css` | Optional. Maps Tailwind v4's `@theme` onto the tokens. RTO only. |
+| `preview.html` | Specimen page. Imports the real CSS, so it fails when the library does. |
+| `contrast.py` | Runs the accessibility checks from GUIDE.md § 4. Exits non-zero on failure. |
+
+Open `preview.html` directly in a browser (`file://` is fine) — it links the
+stylesheets relatively, so it needs a real page context rather than an inlined
+snapshot.
+
+### If the app keeps Tailwind
+
+RTO does, for layout. Import order matters — the bridge reads the tokens, so they
+have to exist first:
+
+```css
+@import "tailwindcss";
+@import "@rezatron-labs/design/tokens.css";
+@import "@rezatron-labs/design/tailwind-bridge.css";
+@import "@rezatron-labs/design/controls.css";
+```
+
+After that, `bg-surface` and `var(--rz-surface)` are the same value by construction.
+A raw `bg-blue-600` in a template is a bug, not a style choice.
 
 ## Scope
 

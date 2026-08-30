@@ -1,0 +1,30 @@
+{
+  "name": "@rezatron-labs/design",
+  "version": "0.1.0",
+  "description": "Shared design language for Rezatron user interfaces — tokens and common controls",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rezatron-labs/platform-design.git"
+  },
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./controls.css": "./controls.css",
+    "./tailwind-bridge.css": "./tailwind-bridge.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "tokens.css",
+    "controls.css",
+    "tailwind-bridge.css",
+    "GUIDE.md",
+    "README.md"
+  ],
+  "scripts": {
+    "check": "python3 contrast.py"
+  }
+}

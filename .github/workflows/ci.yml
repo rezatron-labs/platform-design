@@ -1,0 +1,91 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  # The accessibility claims in GUIDE.md are the whole reason to trust this
+  # library. contrast.py reads the shipped tokens.css rather than a copy, so a
+  # colour edited without checking it fails here rather than in an app.
+  #
+  # Runs on ubuntu-latest, not the unraid pool. This repo has no route to Tower
+  # and should not acquire one — a stylesheet must not stop being mergeable
+  # because a homelab box is down.
+  contrast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Contrast and colour-vision checks
+        run: python3 contrast.py
+
+  # Catches the failure mode CSS is worst at: a syntax error that browsers
+  # silently swallow, dropping every rule after it. No app would report this —
+  # controls would just quietly stop being styled.
+  css:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse every stylesheet
+        run: |
+          npm install --no-save --no-package-lock postcss@8
+          node --input-type=module <<'JS'
+          import { readFileSync } from 'node:fs';
+          import postcss from 'postcss';
+
+          const files = ['tokens.css', 'controls.css', 'tailwind-bridge.css'];
+          let failed = false;
+
+          for (const file of files) {
+            try {
+              const root = postcss.parse(readFileSync(file, 'utf8'), { from: file });
+              let rules = 0;
+              root.walkRules(() => rules++);
+              console.log(`ok    ${file} — ${rules} rules`);
+            } catch (error) {
+              console.error(`FAIL  ${file} — ${error.message}`);
+              failed = true;
+            }
+          }
+          process.exit(failed ? 1 : 0);
+          JS
+
+  # A consuming app installs this by tag and imports through the exports map.
+  # If a file is added to the repo but not to `files` or `exports`, the import
+  # fails in the app rather than here — so check it here.
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Every shipped stylesheet is packed and exported
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, existsSync } from 'node:fs';
+
+          const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+          const exported = Object.keys(pkg.exports).filter(k => k.endsWith('.css'));
+          let failed = false;
+
+          for (const entry of exported) {
+            const file = entry.replace('./', '');
+            if (!existsSync(file)) {
+              console.error(`FAIL  exports "${entry}" but ${file} does not exist`);
+              failed = true;
+            }
+            if (!pkg.files.includes(file)) {
+              console.error(`FAIL  ${file} is exported but missing from "files" — npm would not pack it`);
+              failed = true;
+            }
+          }
+          if (!failed) console.log(`ok    ${exported.length} stylesheets exported and packed`);
+          process.exit(failed ? 1 : 0);
+          JS

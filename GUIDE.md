@@ -331,9 +331,42 @@ list, not a set of decisions. Reading emptiness as evidence let build order stan
 for need, and it wrongly excluded navigation, which every app requires.
 
 **Consequences.** Navigation is tier 2, but as **parts** — `nav-item` with its
-current/hover/focus/collapsed states, `nav-brand`, `nav-utility` — composable into a
+current/hover/focus/collapsed states, `nav-brand`, `nav-foot` — composable into a
 sidebar, top bar or bottom bar. The destinations differ between apps; the shell
 doesn't. Shipping "the RTO sidebar" would impose one app's layout on all of them.
+
+### What the first integration found — v0.2.0
+
+Money Manager adopted these parts, and the gap between what this section promises and
+what `controls.css` shipped surfaced within an hour of someone trying to build a bottom
+bar with them.
+
+**Two of the three arrangements were unreachable.** `.rz-nav` hardcoded
+`flex-direction: column` — three lines below a comment instructing the reader to arrange
+it as a sidebar, a top bar or a bottom bar. Every app wanting either of the other two
+would have written the same override, which is a shared language issuing an instruction
+it cannot carry out. `.rz-nav--horizontal` closes it, and turns the brand's and the
+foot's separating rules with the axis, because a `border-bottom` on a brand sitting in a
+row draws a line under one item rather than between two.
+
+**The one mobile arrangement broke the touch commitment.** `.rz-nav-item` took
+`--rz-control-h` — 32px, a pointer height — and it was the only height available. Part 4
+commits to 44px for anything a thumb hits, and in a bottom bar that is every item in it.
+`rz-btn--lg` had existed for this since v0.1.0 with no navigation counterpart;
+`.rz-nav--touch` is that counterpart. It is opt-in rather than a media query because the
+library cannot know which of an app's arrangements is the touch one.
+
+**And this document named a part that has never existed.** The list above read
+`nav-utility`; the shipped part is `nav-foot`. Part 6 rule 3 exists to stop exactly this,
+and it still happened — because that rule binds the guide to the *tokens*, which ship in
+the same commit, and says nothing about the guide's prose describing `controls.css`. The
+useful correction is not "be more careful": it is that **the specimen page is the only
+mechanism here that fails when a claim stops being true**, so a claim not exercised by
+`preview.html` is a claim nothing checks. The bottom bar is now in it.
+
+None of this was visible before an app tried it. That is the argument for adopting a
+language in the smaller codebase first, and it is worth restating for RTO: these are the
+defects that survived a full design process, written down, reviewed, and gated on CI.
 
 **Card is a deliberate exception.** MM has none today, so the promotion test says tier
 3. It's tier 2 anyway, because every specimen shows MM's tables and forms in cards and

@@ -528,6 +528,44 @@ select.rz-field { padding-right: var(--rz-space-6); }
   border-top: 1px solid var(--rz-rule);
 }
 
+/* The other two arrangements the comment at the top of this section promises.
+   Until v0.2.0 it promised three and delivered one: .rz-nav hardcodes a column,
+   so a top or bottom bar meant every app overriding the library the same way.
+
+   Only the axis changes. The parts that separate themselves along it — the brand's
+   rule and the foot's — turn with it, because a border-bottom on a brand sitting in
+   a row draws a line under one item instead of between two. */
+.rz-nav--horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.rz-nav--horizontal .rz-nav-brand {
+  padding: var(--rz-space-2) var(--rz-space-3) var(--rz-space-2) var(--rz-space-2);
+  margin-bottom: 0;
+  margin-right: var(--rz-space-2);
+  border-bottom: 0;
+  border-right: 1px solid var(--rz-rule);
+}
+
+/* margin-top: auto pushes to the end of a column and to the bottom of a row, which
+   is not what "foot" means once the axis has turned. */
+.rz-nav--horizontal .rz-nav-foot {
+  margin-top: 0;
+  margin-left: auto;
+  padding-top: 0;
+  padding-left: var(--rz-space-2);
+  border-top: 0;
+  border-left: 1px solid var(--rz-rule);
+}
+
+/* 44px, the target Part 4 commits to for anything a thumb hits. --rz-control-h is a
+   pointer height, and it was the only height a nav item could take — which made the
+   bottom bar, the one arrangement that exists because of phones, the one place the
+   library broke its own commitment. Opt-in rather than a media query, because the
+   library cannot know which of an app's arrangements is the touch one. */
+.rz-nav--touch .rz-nav-item { height: var(--rz-control-h-lg); }
+
 /* ── Link ─────────────────────────────────────────────────────────────────── */
 
 .rz-link {

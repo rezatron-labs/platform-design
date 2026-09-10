@@ -64,6 +64,14 @@
   --rz-ramp-3:            #7d99c9;
   --rz-ramp-4:            #2a4d9b;
 
+  /* Chart series. A data series that is not a status: identity, never a
+     verdict, so a chart can set it beside --rz-good and --rz-warn without it
+     reading as either. Stepped to separate from both of those in hue and
+     lightness, for normal and colour-deficient vision, in each theme. The
+     accent was not reused for this because beside --rz-good it does not
+     separate. One slot only; the next is designed when a chart needs it. */
+  --rz-series-1:          #5a86d6;
+
   /* Interaction. Disabled is a token swap rather than opacity: fading a control
      fades its border and shadow too, and a disabled control still needs a
      visible boundary. */
@@ -123,6 +131,8 @@
     --rz-ramp-3:          #2b4a7d;
     --rz-ramp-4:          #5d87c9;
 
+    --rz-series-1:        #5b82d0;
+
     --rz-hover:           #1e282c;
     --rz-pressed:         #253138;
     --rz-disabled-fg:     #626f74;
@@ -176,6 +186,8 @@
   --rz-ramp-2:            #1f3450;
   --rz-ramp-3:            #2b4a7d;
   --rz-ramp-4:            #5d87c9;
+
+  --rz-series-1:          #5b82d0;
 
   --rz-hover:             #1e282c;
   --rz-pressed:           #253138;

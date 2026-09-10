@@ -437,8 +437,9 @@ RTO has today, which makes *where you already are* the loudest thing on screen.
 
 # Part 3 — Token reference
 
-All values verified: text ≥4.5:1, control borders ≥3:1, ramp monotonic in lightness
-and stepped in deuteranopia simulation.
+All values verified: text ≥4.5:1, control borders ≥3:1, chart series ≥3:1 on both
+surface and ground, ramp monotonic in lightness and stepped in deuteranopia
+simulation.
 
 Everything is prefixed `--rz-`. **This matters:** Tailwind v4 defines `--color-blue-600`
 and friends as real custom properties, so an unprefixed `--color-primary` would sit in
@@ -482,6 +483,43 @@ lightness. Deuteranopia steps: 1.45 / 1.67 / 2.78 light, 1.27 / 1.42 / 2.42 dark
 | `--rz-ramp-2` | `#b6c6e2` | `#1f3450` |
 | `--rz-ramp-3` | `#7d99c9` | `#2b4a7d` |
 | `--rz-ramp-4` | `#2a4d9b` | `#5d87c9` |
+
+**Chart series** — a data series that is *not* a status. Added in v0.3.0.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--rz-series-1` | `#5a86d6` | `#5b82d0` |
+
+The first non-status data series: the colour a chart gives a quantity that is
+neither good news nor bad — money put in, drawn beside what it grew by. It is
+identity, never a verdict. That rules out a status colour, and it rules out the
+accent, which already means focus, selection and the current page.
+
+The name is a slot rather than a domain word, by D6's promotion test.
+"Contribution" is one application's domain; "the first data series that is not a
+status" is the language's.
+
+It was validated in the arrangement it is used in — directly beside `--rz-good`
+and directly beside `--rz-warn`, in both themes — as OKLab ΔE ×100 under normal
+vision and under protan and deutan simulation (the worse of the two):
+
+| Theme | Beside | Normal vision ΔE | Colour-deficient ΔE |
+|---|---|---:|---:|
+| light | `--rz-good` | 20.3 | 18.5 |
+| light | `--rz-warn` | 26.4 | 25.2 |
+| dark | `--rz-good` | 20.1 | 18.0 |
+| dark | `--rz-warn` | 29.7 | 25.6 |
+
+Every pair clears the normal-vision floor of ΔE 15 and the colour-deficient
+target of 8. **The accent fails exactly this test**, which is why a new slot
+exists rather than a new use of an old token: `--rz-accent` beside `--rz-good` is
+ΔE 14.7 in light and 13.8 in dark, under the floor in both themes. As a non-text
+mark it is held to 3:1 by `contrast.py`, and measures 3.6:1 on the surface and
+3.3:1 on the ground in light, 4.4:1 and 4.9:1 in dark.
+
+**Further slots are designed when a chart needs them, not in advance.** A slot
+guessed before its chart exists is validated against nothing; slot 2 will be
+stepped against slot 1 and against the status colours it actually stands beside.
 
 ### Type
 

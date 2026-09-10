@@ -7,6 +7,30 @@ Class names and token names are public API — see GUIDE.md Part 6. CSS has no
 compiler, so a rename that would be a caught build error in Java is a silently
 unstyled control here. Renames are major. Nothing is deleted in a minor.
 
+## v0.3.0 — 2026-09-10
+
+Out of Money Manager's 401(k) history chart, the first chart to need a data
+series that is not a status. Additive only: one token added, nothing renamed,
+nothing removed, so an app on `v0.2.0` upgrades by changing the tag and nothing
+else.
+
+**Added**
+
+- `--rz-series-1` — the first non-status chart series: `#5a86d6` in light and
+  `#5b82d0` in dark, defined in the light block and in both dark blocks. A chart
+  that sets a quantity beside a gain and a loss needs a colour that reads as
+  neither. The accent does not separate from `--rz-good` — ΔE 14.7 in light and
+  13.8 in dark, under the normal-vision floor of 15 in both themes — while this
+  slot's worst neighbour is ΔE 20.3 in light and 20.1 in dark. GUIDE Part 3
+  records what it was validated against.
+- `contrast.py` holds it to 3:1 against the surface and the ground in each theme,
+  and `preview.html` shows it standing beside `--rz-good` and `--rz-warn`.
+
+**Compatibility**
+
+Minor. One additive token, no rename, no removal, and no existing token changes
+value, so every `v0.2.0` screen renders identically.
+
 ## v0.2.0 — 2026-08-30
 
 Out of Money Manager's adoption — the first application ever to consume this

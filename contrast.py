@@ -40,6 +40,11 @@ CHECKS = [
     ("signature hairline",   "rule-sig",    "surface",     1.5),
     # WCAG exempts disabled controls from 4.5:1. "Exempt" is not "illegible".
     ("disabled text",        "disabled-fg", "disabled-bg", 2.0),
+    # A chart series is a non-text mark, so WCAG 1.4.11's 3:1 is its threshold.
+    # Checked against the ground as well as the surface, because a chart is
+    # drawn on whichever the screen puts it on.
+    ("chart series 1",       "series-1",    "surface",     3.0),
+    ("series 1 on ground",   "series-1",    "ground",      3.0),
 ]
 
 RAMP = ["ramp-1", "ramp-2", "ramp-3", "ramp-4"]

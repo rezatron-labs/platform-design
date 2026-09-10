@@ -33,6 +33,9 @@
   .cells { display: flex; gap: var(--rz-space-4); flex-wrap: wrap; }
   .cell { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
   .cell-note { font-family: var(--rz-font-meta); font-size: var(--rz-text-meta); color: var(--rz-ink-3); text-align: center; margin: var(--rz-space-2) 0 0; }
+  .series { display: flex; align-items: flex-end; gap: var(--rz-space-6); height: 96px; border-bottom: 1px solid var(--rz-rule-sig); }
+  .series__pair { display: flex; align-items: flex-end; gap: var(--rz-space-0); height: 100%; }
+  .series__pair i { display: block; width: 20px; }
   .toggle { position: fixed; top: var(--rz-space-4); right: var(--rz-space-4); z-index: var(--rz-z-nav); }
 </style>
 </head>
@@ -68,6 +71,35 @@
       <div class="sw"><i style="background:var(--rz-ramp-2)"></i><span>ramp-2</span></div>
       <div class="sw"><i style="background:var(--rz-ramp-3)"></i><span>ramp-3</span></div>
       <div class="sw"><i style="background:var(--rz-ramp-4)"></i><span>ramp-4</span></div>
+      <div class="sw"><i style="background:var(--rz-series-1)"></i><span>series-1</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Chart series</h2>
+    <div class="rz-card">
+      <!-- The slot in the arrangement it was validated in: standing directly
+           beside good and beside warn, as the two bars of one period do. If a
+           pair here stops reading as two colours in either theme, the claim in
+           the guide has stopped being true. -->
+      <div class="series" role="img" aria-label="Series 1 beside good, then beside warn, as adjacent bars">
+        <div class="series__pair">
+          <i style="background:var(--rz-series-1);height:70%"></i>
+          <i style="background:var(--rz-good);height:45%"></i>
+        </div>
+        <div class="series__pair">
+          <i style="background:var(--rz-series-1);height:55%"></i>
+          <i style="background:var(--rz-warn);height:85%"></i>
+        </div>
+        <div class="series__pair">
+          <i style="background:var(--rz-series-1);height:80%"></i>
+          <i style="background:var(--rz-good);height:30%"></i>
+        </div>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">series-1 is the first data series that
+      is not a status. It stands next to good and next to warn in the same chart, so it separates from
+      both in hue and in lightness, for normal and colour-deficient vision, in each theme. Toggle the
+      theme: every pair must still read as two.</p>
     </div>
   </section>
 

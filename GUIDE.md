@@ -383,6 +383,22 @@ two is the real component**.
 Resist the tempting middle move of a shared "overlay primitive" for menus, modals and
 sheets to sit on. Its shape depends entirely on what ends up sitting on it.
 
+### What Money Manager's redesign found — v0.4.0
+
+Money Manager's Bill-pay redesign laid a theme over the language: its own palette and
+type, with the spacing, radii, control heights, focus width, motion and states kept as
+they are. A theme can restate a token. It cannot fix a control, so each defect below is
+fixed here rather than worked around in the app. Every app on the language had it,
+whether or not that app had noticed.
+
+**Fields were measured from the wrong edge.** `.rz-field` set a height and
+`width: 100%` and no `box-sizing`, so an input took its padding and border on top of
+both: 34px tall beside a 32px button or select (the browser already sizes a select from
+its border, but not an input), and 18px wider than the container it was told to fill.
+On one Money Manager screen that overlapped a date field, a balance field and a button
+by 2px each. `border-box` makes `--rz-control-h` mean the outer edge, which is what it
+already meant for every other control.
+
 ## D7 — Space, depth, states
 
 **Spacing:** nine steps on a 4px base — 2, 4, 8, 12, 16, 24, 32, 48, 64. Gaps widen

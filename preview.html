@@ -188,6 +188,20 @@
         </div>
       </div>
     </div>
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- An input, a select and a button in one row. Until v0.4.0 the input sat
+           2px taller than the other two and, told to fill its container, ran 18px
+           past it. If their edges stop lining up, .rz-field has lost border-box. -->
+      <div class="rz-row">
+        <input class="rz-field" aria-label="Paid on" type="date" value="2026-09-12" style="width:auto;flex:1 1 140px">
+        <input class="rz-field" aria-label="Amount" value="138.42" inputmode="decimal" style="width:auto;flex:1 1 140px">
+        <select class="rz-field" aria-label="Category" style="width:auto;flex:1 1 140px"><option>Utilities</option><option>Housing</option></select>
+        <button class="rz-btn" type="button">Record</button>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">One height across the row: the
+      input, the select and the button are each 32px tall, measured to the outer edge, and every
+      field above stops at its card's edge.</p>
+    </div>
   </section>
 
   <section>

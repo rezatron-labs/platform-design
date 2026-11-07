@@ -198,7 +198,13 @@
 
 /* ── Fields ───────────────────────────────────────────────────────────────── */
 
+/* border-box, so the height and the width are measured to the outer edge, as
+   every other control's already are. Without it an input took its padding and
+   its border on top of both: 34px tall beside a 32px button or select (the
+   browser already sizes a select from its border, but not an input), and 18px
+   wider than the container width: 100% told it to fill. */
 .rz-field {
+  box-sizing: border-box;
   display: block;
   width: 100%;
   font-family: inherit;

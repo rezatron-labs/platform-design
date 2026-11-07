@@ -381,6 +381,22 @@ select.rz-field { padding-right: var(--rz-space-6); }
 .rz-badge--critical{ background: var(--rz-crit-bg); color: var(--rz-crit); border-color: transparent; }
 .rz-badge--neutral { background: var(--rz-surface); color: var(--rz-ink-2); border-color: var(--rz-rule); }
 
+/* The icon's slot: a 1em square at the label's size and in its colour, holding a
+   glyph or an inline SVG. Square, because ✓, ▲ and ⚠ are not one width, and
+   badges stacked in a column should start their labels on one line. It inherits
+   the badge's ink, so it is held to the same contrast as the label. */
+.rz-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+}
+
+.rz-badge__icon > svg { width: 100%; height: 100%; }
+
 /* ── Alert ────────────────────────────────────────────────────────────────── */
 
 /* Put role="alert" on this when it appears in response to something the user

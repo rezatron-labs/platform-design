@@ -422,6 +422,13 @@ way to the standard disabled swap. Use the filled button when destroying somethi
 the screen's whole purpose, as in the last button of a confirmation. Use the quiet one
 when it sits beside the content the screen is really about.
 
+**A badge had nowhere to put its icon.** Part 4 makes the icon half of a status's
+encoding, and the badge left it to a bare span, sized by whatever glyph happened to be in
+it. `.rz-badge__icon` is a 1em square slot. A glyph or an inline SVG sits in it at the
+label's size and in the label's colour, so it clears the same contrast the label does,
+and badges stacked in a column start their labels on one line, because ✓, ▲ and ⚠ are not
+one width. Give it `aria-hidden="true"`: the label already says what the icon shows.
+
 ## D7 — Space, depth, states
 
 **Spacing:** nine steps on a 4px base — 2, 4, 8, 12, 16, 24, 32, 48, 64. Gaps widen

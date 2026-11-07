@@ -31,6 +31,9 @@ CHECKS = [
     ("accent text",          "accent",      "surface",     4.5),
     ("text on accent",       "on-accent",   "accent",      4.5),
     ("text on selected",     "ink",         "accent-tint", 4.5),
+    # A badge's icon (.rz-badge__icon) inherits the badge's ink, so these three
+    # and "secondary text" (the neutral badge's ink-2 on surface) hold the icon
+    # to 4.5:1, above the 3:1 an icon needs as a non-text mark.
     ("good on its tint",     "good",        "good-bg",     4.5),
     ("caution on its tint",  "warn",        "warn-bg",     4.5),
     ("critical on its tint", "crit",        "crit-bg",     4.5),

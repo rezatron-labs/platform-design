@@ -212,14 +212,24 @@
     <h2>Status</h2>
     <div class="rz-card">
       <div class="rz-row">
-        <span class="rz-badge rz-badge--good"><span aria-hidden="true">&#10003;</span> On track</span>
-        <span class="rz-badge rz-badge--caution"><span aria-hidden="true">&#9650;</span> Getting tight</span>
-        <span class="rz-badge rz-badge--critical"><span aria-hidden="true">&#9888;</span> No margin</span>
-        <span class="rz-badge rz-badge--neutral"><span aria-hidden="true">&#9675;</span> Just started</span>
+        <span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> On track</span>
+        <span class="rz-badge rz-badge--caution"><span class="rz-badge__icon" aria-hidden="true">&#9650;</span> Getting tight</span>
+        <span class="rz-badge rz-badge--critical"><span class="rz-badge__icon" aria-hidden="true">&#9888;</span> No margin</span>
+        <span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#9675;</span> Just started</span>
+      </div>
+      <!-- Stacked, so the slot's one job shows: every label starts on one line
+           whatever the glyph's width. The last icon is an inline SVG, sized by
+           the slot and coloured by the badge. -->
+      <div class="rz-stack" style="align-items:flex-start;gap:var(--rz-space-2);margin-top:var(--rz-space-3)">
+        <span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> Paid</span>
+        <span class="rz-badge rz-badge--caution"><span class="rz-badge__icon" aria-hidden="true">&#9650;</span> Due in 3 days</span>
+        <span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#9675;</span> Not due yet</span>
+        <span class="rz-badge rz-badge--critical"><span class="rz-badge__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1.5 15.2 14.5H.8z" fill="currentColor"/><path d="M8 6v3.8" stroke="var(--rz-crit-bg)" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12" r="1" fill="var(--rz-crit-bg)"/></svg></span> Overdue</span>
       </div>
       <p class="rz-small" style="margin-top:var(--rz-space-3)">The icon shape and the label are the
       encoding. Colour reinforces — no green/amber/red trio stays distinguishable under
-      deuteranopia at legible contrast.</p>
+      deuteranopia at legible contrast. Each icon sits in a 1em square, so stacked badges start
+      their labels on one line.</p>
 
       <div class="rz-stack" style="margin-top:var(--rz-space-4)">
         <div class="rz-alert rz-alert--critical" role="alert">

@@ -7,6 +7,75 @@ Class names and token names are public API — see GUIDE.md Part 6. CSS has no
 compiler, so a rename that would be a caught build error in Java is a silently
 unstyled control here. Renames are major. Nothing is deleted in a minor.
 
+## v0.4.0 — 2026-11-06
+
+Out of Money Manager's Bill-pay redesign, which lays a theme over the language:
+its own palette and type, with the spacing, radii, control heights, focus width,
+motion and states kept. These are five things a theme cannot reach, fixed here
+rather than worked around in the app. Nothing is renamed or removed, so an app
+on `v0.3.0` upgrades by changing the tag. One fix changes what renders: a
+field's size (see Compatibility).
+
+**Added**
+
+- `--rz-focus`: the focus ring's colour, `var(--rz-accent)` in the light block
+  and in both dark blocks. Every focus outline in `controls.css`, and the
+  focused field's border, now read it instead of the accent. A theme whose
+  accent is not a hue (Money Manager's primary button is ink) maps it to a
+  colour of its own. It does so in each of its three blocks, because the dark
+  blocks restate the default and their selectors outrank a bare `:root`.
+- `.rz-table--controls`: every body row is 40px from rule to rule, which seats
+  a 32px control with 4px above and below. Rows with and without a control
+  line up.
+- `.rz-table--reading`: a ruled reading table. Headers are set as words
+  (`--rz-text-small`, sentence case, no tracking), every row is ruled off
+  including the last, and cells are inset at both ends. Composes with
+  `--controls`. Not named `--ruled`, which stays free for rules between columns.
+- `.rz-btn--danger-quiet`: critical ink and no fill, the critical tint on
+  hover, one step past it when pressed, and the standard disabled swap. It is
+  for a destructive action that sits beside content. The filled `--danger`
+  stays for a dialog that exists only to confirm a deletion.
+- `.rz-btn--danger-outlined`: the quiet danger button with a critical border.
+  It is for the destructive choice in an inline confirmation, beside a safer
+  one such as Keep it.
+- `.rz-badge__icon`: a 1em square slot for a badge's glyph or inline SVG, in
+  the label's colour, so stacked badges start their labels on one line.
+- `contrast.py` resolves `var(--rz-…)` aliases per theme, and reads a
+  `color-mix()` fill out of `controls.css` by its selector rather than
+  restating it. It holds the focus ring to 3:1 on the surface and the ground.
+  It holds the quiet danger button's ink to 4.5:1 on both at rest, on its hover
+  tint and on its pressed mix, and the outlined button's border to 3:1 on both.
+- `preview.html` shows each change in both themes: an input, a select and a
+  button at one height; the ring keeping its colour in a region whose accent is
+  ink; the three volumes of danger button side by side, disabled, and in an
+  inline confirmation; stacked badges with icons; and the two table variants,
+  alone and together.
+
+**Fixed**
+
+- `.rz-field` is `box-sizing: border-box`. An input took its padding and border
+  on top of its height and width, so it was 34px tall beside 32px buttons and
+  selects, and 18px wider than the container `width: 100%` told it to fill.
+- `.rz-table-wrap` takes the focus ring when it is made focusable. A table that
+  scrolls sideways and holds nothing focusable needs its wrap to have
+  `tabindex="0"`, `role="region"` and a name so a keyboard can scroll it, and
+  until now that wrap drew the browser's ring rather than the language's.
+  `controls.css` and the reading-table specimen show the markup.
+
+**Compatibility**
+
+Minor. Six additions and two fixes, with no rename, no removal, and no
+existing token changing value.
+
+- `--rz-focus` defaults to the accent in every block, so every focus ring
+  renders as it did on `v0.3.0`.
+- `.rz-field` changes size. An input is now 32px tall (it was 34px) and exactly
+  as wide as its container (it was 18px wider). Selects already measured this
+  way. A `box-sizing: border-box` an app added locally as a workaround is now
+  redundant and harmless. A width an app shortened by hand to stop the overflow
+  is now 18px narrower than it needs to be.
+- The new classes change nothing until markup uses them.
+
 ## v0.3.0 — 2026-09-10
 
 Out of Money Manager's 401(k) history chart, the first chart to need a data

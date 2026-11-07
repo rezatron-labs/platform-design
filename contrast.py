@@ -63,6 +63,14 @@ CHECKS = [
     ("quiet danger, ground", "crit",        "ground",      4.5),
     ("quiet danger, hover",  "crit",        "crit-bg",     4.5),
     ("quiet danger, pressed", "crit",       "danger-quiet-pressed", 4.5),
+    # .rz-btn--danger-outlined shares the quiet button's rules, so its ink at
+    # rest and on hover is checked above. What it adds is a critical border,
+    # which bounds a control, so WCAG 1.4.11's 3:1 against whatever it stands
+    # on. Its pressed fill is read from its own selector, which also proves the
+    # shared rule still names it.
+    ("outlined border",      "crit",        "surface",     3.0),
+    ("outlined, ground",     "crit",        "ground",      3.0),
+    ("outlined, pressed",    "crit",        "danger-outlined-pressed", 4.5),
 ]
 
 CONTROLS = pathlib.Path(__file__).parent / "controls.css"
@@ -73,6 +81,7 @@ CONTROLS = pathlib.Path(__file__).parent / "controls.css"
 # prevent. Name -> the selector whose `background: color-mix(...)` defines it.
 DERIVED = {
     "danger-quiet-pressed": ".rz-btn--danger-quiet:active",
+    "danger-outlined-pressed": ".rz-btn--danger-outlined:active",
 }
 
 RAMP = ["ramp-1", "ramp-2", "ramp-3", "ramp-4"]
@@ -193,17 +202,20 @@ def parse_mixes(path):
     Only the form controls.css uses is understood:
     `background: color-mix(in oklab, var(--rz-a) N%, var(--rz-b))`. Anything else
     in that rule stops the script rather than being checked as something it isn't.
+    The selector may stand alone or be one of a comma-separated list.
     """
     css = path.read_text()
+    without_comments = re.sub(r"/\*.*?\*/", lambda m: " " * len(m.group()), css, flags=re.S)
     mixes = {}
     for name, selector in DERIVED.items():
-        match = re.search(r"(?m)^" + re.escape(selector) + r"\s*\{", css)
-        if not match:
+        rule = next((m for m in re.finditer(r"([^{}]+)\{", without_comments)
+                     if selector in (s.strip() for s in m.group(1).split(","))), None)
+        if not rule:
             raise SystemExit(f"{selector} not found in {path.name}, so {name} "
                              "cannot be checked")
         mix = re.search(r"background:\s*color-mix\(\s*in oklab,\s*var\(--rz-([a-z0-9-]+)\)"
                         r"\s+(\d+(?:\.\d+)?)%,\s*var\(--rz-([a-z0-9-]+)\)\s*\)",
-                        _body_after(css, match.start()))
+                        _body_after(css, rule.end() - 1))
         if not mix:
             raise SystemExit(f"{selector} in {path.name} has no background in the form "
                              "color-mix(in oklab, var(--rz-a) N%, var(--rz-b))")

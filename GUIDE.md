@@ -416,11 +416,17 @@ in dark mode a pink block. Beside content, a Remove or a Delete then outranked t
 action the screen exists for, which inverts the hierarchy the button emphases are there
 to express. `.rz-btn--ghost` has the right weight but resets its ink on hover, so an app
 that coloured it critical lost the colour under the pointer, and the obvious local fix
-beat the disabled rule on source order. `.rz-btn--danger-quiet` is critical ink with no
-fill. It takes the critical tint on hover, goes one step past it when pressed, and gives
-way to the standard disabled swap. Use the filled button when destroying something is
-the screen's whole purpose, as in the last button of a confirmation. Use the quiet one
-when it sits beside the content the screen is really about.
+beat the disabled rule on source order. Two quieter volumes now sit under the fill.
+`.rz-btn--danger-quiet` is critical ink with no fill. It takes the critical tint on
+hover, goes one step past it when pressed, and gives way to the standard disabled swap.
+`.rz-btn--danger-outlined` is the same button with a critical border.
+
+- Use the filled button when destroying something is the screen's whole purpose, as in
+  a dialog that exists only to confirm it.
+- Use the outlined one for the destructive choice in a confirmation that sits inline,
+  beside a safer choice such as Keep it. The border marks it as the act being confirmed
+  without the weight of a fill.
+- Use the quiet one when it sits beside the content the screen is really about.
 
 **A table had one shape.** `.rz-table` sizes each row from its text, so a row holding an
 Edit button is 48px tall beside a 38px row of text, and a column of row actions leaves

@@ -132,6 +132,7 @@
         <button class="rz-btn rz-btn--secondary" type="button">Cancel</button>
         <button class="rz-btn rz-btn--ghost" type="button">Dismiss</button>
         <button class="rz-btn rz-btn--danger" type="button">Delete</button>
+        <button class="rz-btn rz-btn--danger-outlined" type="button">Delete bill</button>
         <button class="rz-btn rz-btn--danger-quiet" type="button">Remove</button>
       </div>
       <div class="rz-row" style="margin-top:var(--rz-space-3)">
@@ -140,12 +141,23 @@
         <button class="rz-btn rz-btn--lg" type="button">Touch target</button>
         <button class="rz-btn" type="button" disabled>Disabled</button>
         <button class="rz-btn rz-btn--secondary" type="button" disabled>Disabled</button>
+        <button class="rz-btn rz-btn--danger-outlined" type="button" disabled>Disabled</button>
         <button class="rz-btn rz-btn--danger-quiet" type="button" disabled>Disabled</button>
       </div>
       <p class="rz-small" style="margin-top:var(--rz-space-3)">Tab through these — the focus ring
-      is identical on every one, and sits outside the element. Delete is the last step of a
-      confirmation. Remove sits beside content: critical ink, no fill, and the critical tint only
-      under the pointer.</p>
+      is identical on every one, and sits outside the element. Three volumes of destructive: the
+      fill for a dialog that exists only to confirm it, the outline for the destructive choice in
+      an inline confirmation, and Remove beside content, with the critical tint only under the
+      pointer.</p>
+    </div>
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- An inline confirmation, the outlined button's job: the safe choice first,
+           the destructive one marked by its border rather than a fill. -->
+      <p style="margin:0 0 var(--rz-space-3)"><strong>Delete Old gym for good?</strong></p>
+      <div class="rz-row">
+        <button class="rz-btn rz-btn--secondary" type="button">Keep it</button>
+        <button class="rz-btn rz-btn--danger-outlined" type="button">Delete bill</button>
+      </div>
     </div>
   </section>
 

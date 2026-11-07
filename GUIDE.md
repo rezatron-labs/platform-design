@@ -422,6 +422,29 @@ way to the standard disabled swap. Use the filled button when destroying somethi
 the screen's whole purpose, as in the last button of a confirmation. Use the quiet one
 when it sits beside the content the screen is really about.
 
+**A table had one shape.** `.rz-table` sizes each row from its text, so a row holding an
+Edit button is 48px tall beside a 38px row of text, and a column of row actions leaves
+the table uneven. Its header is the label treatment (10px, uppercase, tracked), which
+suits a ledger scanned as a grid and fights a table someone reads down, line by line.
+Two opt-in variants, which compose:
+
+- `.rz-table--controls` makes every body row 40px from rule to rule, which seats a 32px
+  control (`--rz-control-h`) with 4px above and below. A row with a control and a row
+  without one line up. Its outer cells leave room for a focus ring, which
+  `.rz-table-wrap` would otherwise clip at the table's edge.
+- `.rz-table--reading` sets the headers as words (`--rz-text-small`, sentence case, no
+  tracking), rules off every row including the last, so the table closes on a rule, and
+  insets the cells at both ends, so no text sits at the end of a rule.
+
+A reading table is often the one table on a screen with nothing focusable in it, and when
+it scrolls sideways a keyboard cannot reach it. Its `.rz-table-wrap` then needs
+`tabindex="0"`, `role="region"` and a name, and it takes the same focus ring as every
+control.
+
+They are not banding, sticky headers or rules between columns, which a monitoring table
+wants and which are still to come. `--reading` is not called `--ruled` so that name
+stays free for rules between columns, a different device.
+
 **A badge had nowhere to put its icon.** Part 4 makes the icon half of a status's
 encoding, and the badge left it to a bare span, sized by whatever glyph happened to be in
 it. `.rz-badge__icon` is a 1em square slot. A glyph or an inline SVG sits in it at the

@@ -265,6 +265,72 @@
         </table>
       </div>
     </div>
+
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- Rows that hold controls. The closed row has no Edit button and must
+           still be exactly as tall as the rows that do. -->
+      <div class="rz-table-wrap">
+        <table class="rz-table rz-table--controls" id="table-controls">
+          <caption class="rz-sr-only">Payments this month, with controls in each row</caption>
+          <thead>
+            <tr><th><span class="rz-sr-only">Paid</span></th><th>Date</th><th>Bill</th><th class="rz-num">Amount</th><th><span class="rz-sr-only">Actions</span></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><input class="rz-check" type="checkbox" checked aria-label="Rent paid"></td><td>Sep&nbsp;01</td><td>Rent</td><td class="rz-num">2,150.00</td><td class="rz-num"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Rent">Edit</button></td></tr>
+            <tr><td><input class="rz-check" type="checkbox" checked aria-label="Car payment paid"></td><td>Sep&nbsp;05</td><td>Car payment</td><td class="rz-num">412.88</td><td class="rz-num"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Car payment">Edit</button></td></tr>
+            <tr><td><input class="rz-check" type="checkbox" aria-label="Electric paid"></td><td>Sep&nbsp;12</td><td>Electric</td><td class="rz-num">138.42</td><td class="rz-num"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Electric">Edit</button></td></tr>
+            <tr class="is-muted"><td></td><td>Sep&nbsp;15</td><td>Old gym <span class="rz-badge rz-badge--neutral">Closed</span></td><td class="rz-num">0.00</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)"><code>rz-table--controls</code>:
+      every row is 40px, a 32px control with 4px above and below, so the closed row with no Edit
+      button lines up with the rows that have one.</p>
+    </div>
+
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- Nothing in this table is focusable, so when it scrolls sideways (a
+           narrow screen, or the page zoomed) the wrap is what the keyboard
+           scrolls. It needs tabindex, a role and a name to be reachable. -->
+      <div class="rz-table-wrap" tabindex="0" role="region" aria-labelledby="table-reading-name">
+        <table class="rz-table rz-table--reading" id="table-reading">
+          <caption class="rz-sr-only" id="table-reading-name">Recorded balances, newest first</caption>
+          <thead>
+            <tr><th>Recorded</th><th class="rz-num">Bank showed</th><th class="rz-num">Expected</th><th class="rz-num">Difference</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sep&nbsp;30</td><td class="rz-num">4,212.50</td><td class="rz-num">4,212.50</td><td class="rz-num">0.00</td><td><span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> Matched</span></td></tr>
+            <tr><td>Sep&nbsp;23</td><td class="rz-num">4,590.18</td><td class="rz-num">4,577.68</td><td class="rz-num">12.50 more</td><td><span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#8800;</span> Didn&rsquo;t match</span></td></tr>
+            <tr><td>Sep&nbsp;16</td><td class="rz-num">3,904.07</td><td class="rz-num">3,904.07</td><td class="rz-num">0.00</td><td><span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> Matched</span></td></tr>
+            <tr><td>Sep&nbsp;09</td><td class="rz-num">5,128.33</td><td class="rz-num">5,140.33</td><td class="rz-num">12.00 less</td><td><span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#8800;</span> Didn&rsquo;t match</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)"><code>rz-table--reading</code>:
+      headers set as words rather than labels, every row ruled off with the last one included, and
+      the text inset from both ends of each rule.</p>
+    </div>
+
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <div class="rz-table-wrap">
+        <table class="rz-table rz-table--reading rz-table--controls" id="table-both">
+          <caption class="rz-sr-only">Bills, with what each costs a month</caption>
+          <thead>
+            <tr><th>Name</th><th>Repeats</th><th>Next</th><th class="rz-num">Amount</th><th><span class="rz-sr-only">Actions</span></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Rent</td><td>Monthly on the 1st</td><td>Oct&nbsp;01</td><td class="rz-num">2,150.00</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Rent">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Rent">Remove</button></div></td></tr>
+            <tr><td>Car payment</td><td>Monthly on the 5th</td><td>Oct&nbsp;05</td><td class="rz-num">412.88</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Car payment">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Car payment">Remove</button></div></td></tr>
+            <tr><td>Electric</td><td>Monthly on the 12th</td><td>Oct&nbsp;12</td><td class="rz-num">138.42</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Electric">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Electric">Remove</button></div></td></tr>
+            <tr><td>Water</td><td>Monthly on the 20th</td><td>Oct&nbsp;20</td><td class="rz-num">48.20</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Water">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Water">Remove</button></div></td></tr>
+            <tr class="rz-total"><td colspan="3">A month</td><td class="rz-num">2,749.50</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">Both together, as a list of bills
+      with its actions: reading rows at the controls' height, and a quiet Remove beside each row
+      that does not outrank it.</p>
+    </div>
   </section>
 
   <section>

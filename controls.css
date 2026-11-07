@@ -110,7 +110,8 @@
 .rz-check:focus-visible,
 .rz-nav-item:focus-visible,
 .rz-link:focus-visible,
-.rz-selectable:focus-visible {
+.rz-selectable:focus-visible,
+.rz-table-wrap:focus-visible {
   outline: var(--rz-focus-width) solid var(--rz-focus);
   outline-offset: var(--rz-focus-offset);
 }
@@ -303,6 +304,10 @@ select.rz-field { padding-right: var(--rz-space-6); }
 
 /* ── Table ────────────────────────────────────────────────────────────────── */
 
+/* A table that can scroll sideways and holds nothing focusable cannot be
+   scrolled from the keyboard. Give its wrap tabindex="0", role="region" and a
+   name (aria-labelledby its caption); it then takes the same focus ring as
+   every control. */
 .rz-table-wrap { overflow-x: auto; }
 
 .rz-table {
@@ -353,6 +358,59 @@ select.rz-field { padding-right: var(--rz-space-6); }
   border-bottom: 0;
   font-weight: 600;
   padding-top: var(--rz-space-3);
+}
+
+/* Every row one height: 40px from one row's rule to the next, which seats a
+   default control (--rz-control-h) with --rz-space-1 above and below it. The
+   1px comes off because a table cell's height does not count the rule the row
+   draws beneath it. The base table sizes each row from its text, so a row
+   holding an Edit button or a checkbox grows taller than the text rows beside
+   it, and a column of row actions leaves the table uneven. Opt-in, because a
+   table with no controls in its rows reads better at its text's height. The
+   header row keeps its own size; only body rows hold controls. */
+.rz-table--controls td {
+  height: calc(var(--rz-control-h) + 2 * var(--rz-space-1) - 1px);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* The outer cells keep room for a focus ring. A control in the first or last
+   column would otherwise sit on the table's edge, and .rz-table-wrap, which
+   scrolls sideways, clips whatever crosses that edge, the ring included. */
+.rz-table--controls th:first-child,
+.rz-table--controls td:first-child {
+  padding-left: calc(var(--rz-focus-width) + var(--rz-focus-offset));
+}
+
+.rz-table--controls th:last-child,
+.rz-table--controls td:last-child {
+  padding-right: calc(var(--rz-focus-width) + var(--rz-focus-offset));
+}
+
+/* A table read down, line by line (a list of bills, a history of balances),
+   rather than scanned across as a grid. Headers are set as words, not labels;
+   every row is ruled off, the last included, so the table closes on a rule like
+   a ledger page; and cells are inset at both ends, so no text sits at the end of
+   a rule. Composes with --controls. Not named --ruled, so that name stays free
+   for rules between columns, which are a different device. */
+.rz-table--reading th {
+  font-size: var(--rz-text-small);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.rz-table--reading th,
+.rz-table--reading td,
+.rz-table--reading th:first-child,
+.rz-table--reading td:first-child,
+.rz-table--reading th:last-child,
+.rz-table--reading td:last-child {
+  padding-left: var(--rz-space-3);
+  padding-right: var(--rz-space-3);
+}
+
+.rz-table--reading tbody tr:last-child:not(.rz-total) td {
+  border-bottom: 1px solid var(--rz-rule);
 }
 
 /* ── Badge ────────────────────────────────────────────────────────────────── */

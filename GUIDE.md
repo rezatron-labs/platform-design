@@ -411,6 +411,17 @@ default, and their selectors outrank a bare `:root`. The focused field's border 
 too, so a focused field shows one colour for one state. Selected and current keep the
 accent; only focus moved.
 
+**Destroying something came at one volume.** `.rz-btn--danger` is a crimson fill, and
+in dark mode a pink block. Beside content, a Remove or a Delete then outranked the
+action the screen exists for, which inverts the hierarchy the button emphases are there
+to express. `.rz-btn--ghost` has the right weight but resets its ink on hover, so an app
+that coloured it critical lost the colour under the pointer, and the obvious local fix
+beat the disabled rule on source order. `.rz-btn--danger-quiet` is critical ink with no
+fill. It takes the critical tint on hover, goes one step past it when pressed, and gives
+way to the standard disabled swap. Use the filled button when destroying something is
+the screen's whole purpose, as in the last button of a confirmation. Use the quiet one
+when it sits beside the content the screen is really about.
+
 ## D7 — Space, depth, states
 
 **Spacing:** nine steps on a 4px base — 2, 4, 8, 12, 16, 24, 32, 48, 64. Gaps widen

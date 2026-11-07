@@ -177,16 +177,34 @@
 
 .rz-btn--danger { background: var(--rz-crit); color: var(--rz-on-accent); }
 
+/* A destructive action that is not what the screen is for: Remove beside a row,
+   Delete at the foot of a panel. Critical ink and no fill, so it ranks below the
+   screen's own action instead of above it, and the critical tint arrives on hover
+   to say what a click will do. The filled --danger is for when destroying
+   something is the screen's whole purpose, as in a confirmation's last button.
+   Disabled is the standard swap further down, which wins by coming later. */
+.rz-btn--danger-quiet {
+  background: transparent;
+  color: var(--rz-crit);
+  border-color: transparent;
+}
+
 .rz-btn:hover { background: color-mix(in oklab, var(--rz-accent) 88%, var(--rz-ink)); }
 .rz-btn--secondary:hover { background: var(--rz-hover); }
 .rz-btn--ghost:hover { background: var(--rz-hover); color: var(--rz-ink); }
 .rz-btn--danger:hover { background: color-mix(in oklab, var(--rz-crit) 88%, var(--rz-ink)); }
+.rz-btn--danger-quiet:hover { background: var(--rz-crit-bg); }
 
 /* Pressed moves nothing. Transforms read as a gimmick on desktop and misfire on
    touch, where the finger is already covering the control. */
 .rz-btn:active { background: color-mix(in oklab, var(--rz-accent) 76%, var(--rz-ink)); }
 .rz-btn--secondary:active,
 .rz-btn--ghost:active { background: var(--rz-pressed); }
+
+/* One step past the hover tint, toward the critical ink it carries: darker in
+   light and lighter in dark, the way --rz-pressed steps from --rz-hover.
+   contrast.py reads this mix from here and holds the ink to 4.5:1 on it. */
+.rz-btn--danger-quiet:active { background: color-mix(in oklab, var(--rz-crit-bg) 88%, var(--rz-crit)); }
 
 /* A token swap, not opacity — opacity would fade the border too, and a disabled
    control still needs a visible boundary. */

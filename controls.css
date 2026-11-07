@@ -102,14 +102,17 @@
 
 /* One treatment, everywhere, in the margin outside the element — so it can
    coexist with selected (on the element) and current (inside it).
-   :focus-visible rather than :focus, so a mouse click does not draw a ring. */
+   :focus-visible rather than :focus, so a mouse click does not draw a ring.
+   Drawn in --rz-focus, never --rz-accent directly: they are the same colour
+   until a theme separates them, and selected and current keep the accent. */
 .rz-btn:focus-visible,
 .rz-field:focus-visible,
 .rz-check:focus-visible,
 .rz-nav-item:focus-visible,
 .rz-link:focus-visible,
-.rz-selectable:focus-visible {
-  outline: var(--rz-focus-width) solid var(--rz-accent);
+.rz-selectable:focus-visible,
+.rz-table-wrap:focus-visible {
+  outline: var(--rz-focus-width) solid var(--rz-focus);
   outline-offset: var(--rz-focus-offset);
 }
 
@@ -175,16 +178,45 @@
 
 .rz-btn--danger { background: var(--rz-crit); color: var(--rz-on-accent); }
 
+/* A destructive action that is not what the screen is for: Remove beside a row,
+   Delete at the foot of a panel. Critical ink and no fill, so it ranks below the
+   screen's own action instead of above it, and the critical tint arrives on hover
+   to say what a click will do. The filled --danger is for when destroying
+   something is the screen's whole purpose, as in a dialog that exists only to
+   confirm it. Disabled is the standard swap further down, which wins by coming
+   later. --danger-outlined shares every rule here and adds a border. */
+.rz-btn--danger-quiet,
+.rz-btn--danger-outlined {
+  background: transparent;
+  color: var(--rz-crit);
+  border-color: transparent;
+}
+
+/* The quiet button with a critical border: the destructive choice in an inline
+   confirmation, sitting beside a safer one such as Keep it. The border marks it
+   as the act being confirmed without the weight of a fill, which in dark mode
+   would be a pale block louder than the question it answers. As a control
+   boundary the border is held to 3:1 against the surface and the ground. */
+.rz-btn--danger-outlined { border-color: var(--rz-crit); }
+
 .rz-btn:hover { background: color-mix(in oklab, var(--rz-accent) 88%, var(--rz-ink)); }
 .rz-btn--secondary:hover { background: var(--rz-hover); }
 .rz-btn--ghost:hover { background: var(--rz-hover); color: var(--rz-ink); }
 .rz-btn--danger:hover { background: color-mix(in oklab, var(--rz-crit) 88%, var(--rz-ink)); }
+.rz-btn--danger-quiet:hover,
+.rz-btn--danger-outlined:hover { background: var(--rz-crit-bg); }
 
 /* Pressed moves nothing. Transforms read as a gimmick on desktop and misfire on
    touch, where the finger is already covering the control. */
 .rz-btn:active { background: color-mix(in oklab, var(--rz-accent) 76%, var(--rz-ink)); }
 .rz-btn--secondary:active,
 .rz-btn--ghost:active { background: var(--rz-pressed); }
+
+/* One step past the hover tint, toward the critical ink it carries: darker in
+   light and lighter in dark, the way --rz-pressed steps from --rz-hover.
+   contrast.py reads this mix from here and holds the ink to 4.5:1 on it. */
+.rz-btn--danger-quiet:active,
+.rz-btn--danger-outlined:active { background: color-mix(in oklab, var(--rz-crit-bg) 88%, var(--rz-crit)); }
 
 /* A token swap, not opacity — opacity would fade the border too, and a disabled
    control still needs a visible boundary. */
@@ -198,7 +230,13 @@
 
 /* ── Fields ───────────────────────────────────────────────────────────────── */
 
+/* border-box, so the height and the width are measured to the outer edge, as
+   every other control's already are. Without it an input took its padding and
+   its border on top of both: 34px tall beside a 32px button or select (the
+   browser already sizes a select from its border, but not an input), and 18px
+   wider than the container width: 100% told it to fill. */
 .rz-field {
+  box-sizing: border-box;
   display: block;
   width: 100%;
   font-family: inherit;
@@ -222,7 +260,8 @@ textarea.rz-field {
 
 select.rz-field { padding-right: var(--rz-space-6); }
 
-.rz-field:focus-visible { border-color: var(--rz-accent); }
+/* The border joins the ring, so a focused field shows one colour for one state. */
+.rz-field:focus-visible { border-color: var(--rz-focus); }
 .rz-field::placeholder { color: var(--rz-ink-3); }
 
 .rz-field:disabled {
@@ -276,6 +315,10 @@ select.rz-field { padding-right: var(--rz-space-6); }
 
 /* ── Table ────────────────────────────────────────────────────────────────── */
 
+/* A table that can scroll sideways and holds nothing focusable cannot be
+   scrolled from the keyboard. Give its wrap tabindex="0", role="region" and a
+   name (aria-labelledby its caption); it then takes the same focus ring as
+   every control. */
 .rz-table-wrap { overflow-x: auto; }
 
 .rz-table {
@@ -328,6 +371,59 @@ select.rz-field { padding-right: var(--rz-space-6); }
   padding-top: var(--rz-space-3);
 }
 
+/* Every row one height: 40px from one row's rule to the next, which seats a
+   default control (--rz-control-h) with --rz-space-1 above and below it. The
+   1px comes off because a table cell's height does not count the rule the row
+   draws beneath it. The base table sizes each row from its text, so a row
+   holding an Edit button or a checkbox grows taller than the text rows beside
+   it, and a column of row actions leaves the table uneven. Opt-in, because a
+   table with no controls in its rows reads better at its text's height. The
+   header row keeps its own size; only body rows hold controls. */
+.rz-table--controls td {
+  height: calc(var(--rz-control-h) + 2 * var(--rz-space-1) - 1px);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* The outer cells keep room for a focus ring. A control in the first or last
+   column would otherwise sit on the table's edge, and .rz-table-wrap, which
+   scrolls sideways, clips whatever crosses that edge, the ring included. */
+.rz-table--controls th:first-child,
+.rz-table--controls td:first-child {
+  padding-left: calc(var(--rz-focus-width) + var(--rz-focus-offset));
+}
+
+.rz-table--controls th:last-child,
+.rz-table--controls td:last-child {
+  padding-right: calc(var(--rz-focus-width) + var(--rz-focus-offset));
+}
+
+/* A table read down, line by line (a list of bills, a history of balances),
+   rather than scanned across as a grid. Headers are set as words, not labels;
+   every row is ruled off, the last included, so the table closes on a rule like
+   a ledger page; and cells are inset at both ends, so no text sits at the end of
+   a rule. Composes with --controls. Not named --ruled, so that name stays free
+   for rules between columns, which are a different device. */
+.rz-table--reading th {
+  font-size: var(--rz-text-small);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.rz-table--reading th,
+.rz-table--reading td,
+.rz-table--reading th:first-child,
+.rz-table--reading td:first-child,
+.rz-table--reading th:last-child,
+.rz-table--reading td:last-child {
+  padding-left: var(--rz-space-3);
+  padding-right: var(--rz-space-3);
+}
+
+.rz-table--reading tbody tr:last-child:not(.rz-total) td {
+  border-bottom: 1px solid var(--rz-rule);
+}
+
 /* ── Badge ────────────────────────────────────────────────────────────────── */
 
 /* No green/amber/red trio survives deuteranopia at legible contrast, so the
@@ -353,6 +449,22 @@ select.rz-field { padding-right: var(--rz-space-6); }
 .rz-badge--caution { background: var(--rz-warn-bg); color: var(--rz-warn); border-color: transparent; }
 .rz-badge--critical{ background: var(--rz-crit-bg); color: var(--rz-crit); border-color: transparent; }
 .rz-badge--neutral { background: var(--rz-surface); color: var(--rz-ink-2); border-color: var(--rz-rule); }
+
+/* The icon's slot: a 1em square at the label's size and in its colour, holding a
+   glyph or an inline SVG. Square, because ✓, ▲ and ⚠ are not one width, and
+   badges stacked in a column should start their labels on one line. It inherits
+   the badge's ink, so it is held to the same contrast as the label. */
+.rz-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+}
+
+.rz-badge__icon > svg { width: 100%; height: 100%; }
 
 /* ── Alert ────────────────────────────────────────────────────────────────── */
 

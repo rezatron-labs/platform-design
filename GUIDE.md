@@ -383,6 +383,81 @@ two is the real component**.
 Resist the tempting middle move of a shared "overlay primitive" for menus, modals and
 sheets to sit on. Its shape depends entirely on what ends up sitting on it.
 
+### What Money Manager's redesign found — v0.4.0
+
+Money Manager's Bill-pay redesign laid a theme over the language: its own palette and
+type, with the spacing, radii, control heights, focus width, motion and states kept as
+they are. A theme can restate a token. It cannot fix a control, so each defect below is
+fixed here rather than worked around in the app. Every app on the language had it,
+whether or not that app had noticed.
+
+**Fields were measured from the wrong edge.** `.rz-field` set a height and
+`width: 100%` and no `box-sizing`, so an input took its padding and border on top of
+both: 34px tall beside a 32px button or select (the browser already sizes a select from
+its border, but not an input), and 18px wider than the container it was told to fill.
+On one Money Manager screen that overlapped a date field, a balance field and a button
+by 2px each. `border-box` makes `--rz-control-h` mean the outer edge, which is what it
+already meant for every other control.
+
+**The accent was the focus ring, and they could not be separated.** Every focus outline
+read `--rz-accent` directly. That was right for Harbor, whose accent is a deep blue at
+8:1 (D4 chose it partly because it is also the ring). It was wrong for a theme whose
+primary action is ink rather than a hue, because that theme's ring became the colour of
+its body text, which reads as a border rather than as *you are here*. `--rz-focus` is
+the ring's own token. It defaults to `var(--rz-accent)` in the light block and both dark
+blocks, so an app that never mentions it renders exactly as before. A theme that wants a
+different ring maps it in each of its own three blocks: the dark blocks restate the
+default, and their selectors outrank a bare `:root`. The focused field's border takes it
+too, so a focused field shows one colour for one state. Selected and current keep the
+accent; only focus moved.
+
+**Destroying something came at one volume.** `.rz-btn--danger` is a crimson fill, and
+in dark mode a pink block. Beside content, a Remove or a Delete then outranked the
+action the screen exists for, which inverts the hierarchy the button emphases are there
+to express. `.rz-btn--ghost` has the right weight but resets its ink on hover, so an app
+that coloured it critical lost the colour under the pointer, and the obvious local fix
+beat the disabled rule on source order. Two quieter volumes now sit under the fill.
+`.rz-btn--danger-quiet` is critical ink with no fill. It takes the critical tint on
+hover, goes one step past it when pressed, and gives way to the standard disabled swap.
+`.rz-btn--danger-outlined` is the same button with a critical border.
+
+- Use the filled button when destroying something is the screen's whole purpose, as in
+  a dialog that exists only to confirm it.
+- Use the outlined one for the destructive choice in a confirmation that sits inline,
+  beside a safer choice such as Keep it. The border marks it as the act being confirmed
+  without the weight of a fill.
+- Use the quiet one when it sits beside the content the screen is really about.
+
+**A table had one shape.** `.rz-table` sizes each row from its text, so a row holding an
+Edit button is 48px tall beside a 38px row of text, and a column of row actions leaves
+the table uneven. Its header is the label treatment (10px, uppercase, tracked), which
+suits a ledger scanned as a grid and fights a table someone reads down, line by line.
+Two opt-in variants, which compose:
+
+- `.rz-table--controls` makes every body row 40px from rule to rule, which seats a 32px
+  control (`--rz-control-h`) with 4px above and below. A row with a control and a row
+  without one line up. Its outer cells leave room for a focus ring, which
+  `.rz-table-wrap` would otherwise clip at the table's edge.
+- `.rz-table--reading` sets the headers as words (`--rz-text-small`, sentence case, no
+  tracking), rules off every row including the last, so the table closes on a rule, and
+  insets the cells at both ends, so no text sits at the end of a rule.
+
+A reading table is often the one table on a screen with nothing focusable in it, and when
+it scrolls sideways a keyboard cannot reach it. Its `.rz-table-wrap` then needs
+`tabindex="0"`, `role="region"` and a name, and it takes the same focus ring as every
+control.
+
+They are not banding, sticky headers or rules between columns, which a monitoring table
+wants and which are still to come. `--reading` is not called `--ruled` so that name
+stays free for rules between columns, a different device.
+
+**A badge had nowhere to put its icon.** Part 4 makes the icon half of a status's
+encoding, and the badge left it to a bare span, sized by whatever glyph happened to be in
+it. `.rz-badge__icon` is a 1em square slot. A glyph or an inline SVG sits in it at the
+label's size and in the label's colour, so it clears the same contrast the label does,
+and badges stacked in a column start their labels on one line, because ✓, ▲ and ⚠ are not
+one width. Give it `aria-hidden="true"`: the label already says what the icon shows.
+
 ## D7 — Space, depth, states
 
 **Spacing:** nine steps on a 4px base — 2, 4, 8, 12, 16, 24, 32, 48, 64. Gaps widen
@@ -412,7 +487,7 @@ and `z-[300]`.
 
 | State | Zone | Treatment |
 |---|---|---|
-| Focus | **outside** the box | 2px accent outline, 2px offset. Keyboard only, never removed. |
+| Focus | **outside** the box | 2px `--rz-focus` outline (the accent, unless a theme maps it), 2px offset. Keyboard only, never removed. |
 | Selected | **on** the box | 12% accent tint fill, accent border |
 | Current | **inside** the box | 4px accent dot beneath the figure |
 
@@ -462,6 +537,7 @@ the framework's own namespace. That is how you get a collision nobody can find.
 | `--rz-accent` | `#2a4d9b` | `#79a6e8` | 8.0 / 6.7:1 |
 | `--rz-on-accent` | `#ffffff` | `#0e1416` | 8.0 / 7.5:1 |
 | `--rz-accent-tint` | `#e5eaf3` | `#232f3a` | selected fill, nav current |
+| `--rz-focus` | `var(--rz-accent)` | `var(--rz-accent)` | the focus ring; 3:1 on surface and ground. Added in v0.4.0 |
 | `--rz-good` | `#0d6b62` | `#3ec2b1` | 5.3 / 6.8:1 on its tint |
 | `--rz-good-bg` | `#ddeeec` | `#0f2b28` | |
 | `--rz-warn` | `#a25b07` | `#e8a552` | 4.6 / 7.3:1 on its tint |
@@ -569,8 +645,9 @@ Mechanical and checkable. Verify these rather than trusting them.
 - **Control boundaries ≥ 3:1.** `--rz-control` is the token for anything that bounds
   an input or a button. `--rz-rule` is decorative and deliberately below that
   threshold — do not use it for a control.
-- **Visible focus on everything focusable.** 2px accent outline at 2px offset, and it
-  is never the same treatment as selected or current.
+- **Visible focus on everything focusable.** 2px outline in `--rz-focus` (the accent,
+  unless a theme maps it) at 2px offset, and it is never the same treatment as selected
+  or current. Whatever a theme maps it to clears 3:1 against the surface and the ground.
 - **Touch targets:** 44px for anything a thumb hits; 24×24 is the absolute floor
   (WCAG 2.5.8).
 - **No meaning in hue alone.** Every status carries an icon whose *shape* differs and

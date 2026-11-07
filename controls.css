@@ -102,14 +102,16 @@
 
 /* One treatment, everywhere, in the margin outside the element — so it can
    coexist with selected (on the element) and current (inside it).
-   :focus-visible rather than :focus, so a mouse click does not draw a ring. */
+   :focus-visible rather than :focus, so a mouse click does not draw a ring.
+   Drawn in --rz-focus, never --rz-accent directly: they are the same colour
+   until a theme separates them, and selected and current keep the accent. */
 .rz-btn:focus-visible,
 .rz-field:focus-visible,
 .rz-check:focus-visible,
 .rz-nav-item:focus-visible,
 .rz-link:focus-visible,
 .rz-selectable:focus-visible {
-  outline: var(--rz-focus-width) solid var(--rz-accent);
+  outline: var(--rz-focus-width) solid var(--rz-focus);
   outline-offset: var(--rz-focus-offset);
 }
 
@@ -228,7 +230,8 @@ textarea.rz-field {
 
 select.rz-field { padding-right: var(--rz-space-6); }
 
-.rz-field:focus-visible { border-color: var(--rz-accent); }
+/* The border joins the ring, so a focused field shows one colour for one state. */
+.rz-field:focus-visible { border-color: var(--rz-focus); }
 .rz-field::placeholder { color: var(--rz-ink-3); }
 
 .rz-field:disabled {

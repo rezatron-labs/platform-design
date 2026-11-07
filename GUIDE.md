@@ -399,6 +399,18 @@ On one Money Manager screen that overlapped a date field, a balance field and a 
 by 2px each. `border-box` makes `--rz-control-h` mean the outer edge, which is what it
 already meant for every other control.
 
+**The accent was the focus ring, and they could not be separated.** Every focus outline
+read `--rz-accent` directly. That was right for Harbor, whose accent is a deep blue at
+8:1 (D4 chose it partly because it is also the ring). It was wrong for a theme whose
+primary action is ink rather than a hue, because that theme's ring became the colour of
+its body text, which reads as a border rather than as *you are here*. `--rz-focus` is
+the ring's own token. It defaults to `var(--rz-accent)` in the light block and both dark
+blocks, so an app that never mentions it renders exactly as before. A theme that wants a
+different ring maps it in each of its own three blocks: the dark blocks restate the
+default, and their selectors outrank a bare `:root`. The focused field's border takes it
+too, so a focused field shows one colour for one state. Selected and current keep the
+accent; only focus moved.
+
 ## D7 — Space, depth, states
 
 **Spacing:** nine steps on a 4px base — 2, 4, 8, 12, 16, 24, 32, 48, 64. Gaps widen
@@ -428,7 +440,7 @@ and `z-[300]`.
 
 | State | Zone | Treatment |
 |---|---|---|
-| Focus | **outside** the box | 2px accent outline, 2px offset. Keyboard only, never removed. |
+| Focus | **outside** the box | 2px `--rz-focus` outline (the accent, unless a theme maps it), 2px offset. Keyboard only, never removed. |
 | Selected | **on** the box | 12% accent tint fill, accent border |
 | Current | **inside** the box | 4px accent dot beneath the figure |
 
@@ -478,6 +490,7 @@ the framework's own namespace. That is how you get a collision nobody can find.
 | `--rz-accent` | `#2a4d9b` | `#79a6e8` | 8.0 / 6.7:1 |
 | `--rz-on-accent` | `#ffffff` | `#0e1416` | 8.0 / 7.5:1 |
 | `--rz-accent-tint` | `#e5eaf3` | `#232f3a` | selected fill, nav current |
+| `--rz-focus` | `var(--rz-accent)` | `var(--rz-accent)` | the focus ring; 3:1 on surface and ground. Added in v0.4.0 |
 | `--rz-good` | `#0d6b62` | `#3ec2b1` | 5.3 / 6.8:1 on its tint |
 | `--rz-good-bg` | `#ddeeec` | `#0f2b28` | |
 | `--rz-warn` | `#a25b07` | `#e8a552` | 4.6 / 7.3:1 on its tint |
@@ -585,8 +598,9 @@ Mechanical and checkable. Verify these rather than trusting them.
 - **Control boundaries ≥ 3:1.** `--rz-control` is the token for anything that bounds
   an input or a button. `--rz-rule` is decorative and deliberately below that
   threshold — do not use it for a control.
-- **Visible focus on everything focusable.** 2px accent outline at 2px offset, and it
-  is never the same treatment as selected or current.
+- **Visible focus on everything focusable.** 2px outline in `--rz-focus` (the accent,
+  unless a theme maps it) at 2px offset, and it is never the same treatment as selected
+  or current. Whatever a theme maps it to clears 3:1 against the surface and the ground.
 - **Touch targets:** 44px for anything a thumb hits; 24×24 is the absolute floor
   (WCAG 2.5.8).
 - **No meaning in hue alone.** Every status carries an icon whose *shape* differs and

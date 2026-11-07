@@ -266,6 +266,27 @@
       <p class="rz-small" style="margin-top:var(--rz-space-4)">Focus sits outside the box, selected
       is on it, current is inside it — so all three can be true at once and each stays readable.</p>
     </div>
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- The right-hand group restates only the accent, as ink, the way a theme
+           with an ink-filled primary button does. --rz-focus was resolved on :root
+           and is inherited as that colour, so the ring stays on its own token.
+           Until v0.4.0 the ring read --rz-accent here and turned the colour of the
+           text. A theme that restates the accent on :root itself must restate
+           --rz-focus there too, or the default alias follows the new accent. -->
+      <div class="rz-row" style="gap:var(--rz-space-8)">
+        <div class="rz-row">
+          <button class="rz-btn" type="button" id="focus-default">Save</button>
+          <input class="rz-field" aria-label="Note, default accent" value="Rent" style="width:160px">
+        </div>
+        <div class="rz-row" style="--rz-accent:var(--rz-ink);--rz-on-accent:var(--rz-surface)">
+          <button class="rz-btn" type="button" id="focus-ink">Save</button>
+          <input class="rz-field" aria-label="Note, ink accent" value="Rent" style="width:160px">
+        </div>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">The ring has its own colour. On the
+      left it is the accent, as it always was. On the right the accent is ink, and the ring keeps
+      its colour rather than turning the colour of the text. Tab through both groups.</p>
+    </div>
   </section>
 
   <section>

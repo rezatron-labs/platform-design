@@ -45,6 +45,12 @@ CHECKS = [
     # drawn on whichever the screen puts it on.
     ("chart series 1",       "series-1",    "surface",     3.0),
     ("series 1 on ground",   "series-1",    "ground",      3.0),
+    # The focus ring sits outside the element, so it is seen against whatever
+    # the element stands on: a card's surface or the page's ground. A ring is a
+    # non-text indicator, so 3:1 (WCAG 1.4.11). --rz-focus is an alias of the
+    # accent by default; the parser resolves it per theme before this runs.
+    ("focus ring",           "focus",       "surface",     3.0),
+    ("focus ring on ground", "focus",       "ground",      3.0),
 ]
 
 RAMP = ["ramp-1", "ramp-2", "ramp-3", "ramp-4"]
@@ -76,13 +82,60 @@ def _colours(text):
     return dict(re.findall(r"--rz-([a-z0-9-]+):\s*(#[0-9a-fA-F]{3,8})\s*;", text))
 
 
+def _aliases(text):
+    """Tokens defined as another token, such as `--rz-focus: var(--rz-accent)`."""
+    return dict(re.findall(r"--rz-([a-z0-9-]+):\s*var\(--rz-([a-z0-9-]+)\)\s*;", text))
+
+
+def _merge(colours, aliases, body):
+    """Overlay one block's declarations, a later one replacing an earlier one.
+
+    A token is either a colour or an alias, never both: a block that gives a hex
+    to a token an earlier block aliased replaces the alias, and the reverse, as
+    the cascade does.
+    """
+    new_colours, new_aliases = _colours(body), _aliases(body)
+    for name in new_colours:
+        aliases.pop(name, None)
+    for name in new_aliases:
+        colours.pop(name, None)
+    colours.update(new_colours)
+    aliases.update(new_aliases)
+
+
+def _resolve(colours, aliases, theme):
+    """Turn every alias into the colour it ends at, in this theme's palette.
+
+    Resolved after the theme's blocks are merged, as the browser does, so an alias
+    takes the value its target has in this theme. A missing or circular target
+    stops the script rather than dropping the token, which would leave its checks
+    reporting a missing token instead of the real fault.
+    """
+    resolved = dict(colours)
+    for name in aliases:
+        seen, target = [name], aliases[name]
+        while target in aliases:
+            if target in seen:
+                raise SystemExit(f"{theme}: --rz-{name} is a circular alias "
+                                 f"({' -> '.join(seen + [target])})")
+            seen.append(target)
+            target = aliases[target]
+        if target not in colours:
+            raise SystemExit(f"{theme}: --rz-{name} resolves to --rz-{target}, "
+                             f"which tokens.css never gives a colour")
+        resolved[name] = colours[target]
+    return resolved
+
+
 def parse_tokens(path):
     """Return {"light": {...}, "dark": {...}} of --rz-* colour values.
 
     Light is every bare `:root {` block — the colour block plus the
     theme-independent one, which contributes no colours but is harmless to merge.
     Dark is that, overlaid with the explicit `:root.dark` block, so tokens which
-    don't change per theme still resolve.
+    don't change per theme still resolve. Aliases (`var(--rz-…)`) are merged the
+    same way and then resolved per theme, so `--rz-focus` is checked as the colour
+    it actually renders in each.
 
     The `@media (prefers-color-scheme: dark)` block is deliberately skipped: it
     carries the same values as `:root.dark` by construction, and checking one of
@@ -91,9 +144,9 @@ def parse_tokens(path):
     """
     css = path.read_text()
 
-    light = {}
+    light, light_aliases = {}, {}
     for match in re.finditer(r"(?m)^:root\s*\{", css):
-        light.update(_colours(_body_after(css, match.start())))
+        _merge(light, light_aliases, _body_after(css, match.start()))
     if not light:
         raise SystemExit(f"Found no bare ':root' colour block in {path}")
 
@@ -101,14 +154,15 @@ def parse_tokens(path):
     if not explicit_dark:
         raise SystemExit(f"Found no ':root.dark' block in {path}")
 
-    dark = dict(light)
-    dark.update(_colours(_body_after(css, explicit_dark.start())))
+    dark, dark_aliases = dict(light), dict(light_aliases)
+    _merge(dark, dark_aliases, _body_after(css, explicit_dark.start()))
 
     if dark == light:
         raise SystemExit("Light and dark parsed identically — the parser is wrong, "
                          "not the palette.")
 
-    return {"light": light, "dark": dark}
+    return {"light": _resolve(light, light_aliases, "light"),
+            "dark": _resolve(dark, dark_aliases, "dark")}
 
 
 # ── Colour maths ───────────────────────────────────────────────────────────────

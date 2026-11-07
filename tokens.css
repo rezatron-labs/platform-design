@@ -45,6 +45,14 @@
   --rz-on-accent:         #ffffff;
   --rz-accent-tint:       #e5eaf3;
 
+  /* The focus ring's colour. The accent unless a theme says otherwise, so an app
+     that never mentions it renders exactly as it did. A theme whose accent is not
+     a hue (an ink-filled primary button, say) points this at a colour of its own:
+     a ring the colour of body text reads as a border, not as "you are here".
+     Both dark blocks restate it, and their selectors outrank a bare :root, so a
+     theme that maps it must map it in each of its own three blocks too. */
+  --rz-focus:             var(--rz-accent);
+
   /* Status. Colour reinforces; it never encodes on its own. Every status must
      also carry an icon whose shape differs and a text label — no green/amber/red
      trio stays distinguishable under deuteranopia at legible contrast. */
@@ -117,6 +125,8 @@
     --rz-on-accent:       #0e1416;
     --rz-accent-tint:     #232f3a;
 
+    --rz-focus:           var(--rz-accent);
+
     --rz-good:            #3ec2b1;
     --rz-good-bg:         #0f2b28;
     --rz-warn:            #e8a552;
@@ -172,6 +182,8 @@
   --rz-accent:            #79a6e8;
   --rz-on-accent:         #0e1416;
   --rz-accent-tint:       #232f3a;
+
+  --rz-focus:             var(--rz-accent);
 
   --rz-good:              #3ec2b1;
   --rz-good-bg:           #0f2b28;

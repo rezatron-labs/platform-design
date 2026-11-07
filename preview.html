@@ -132,6 +132,8 @@
         <button class="rz-btn rz-btn--secondary" type="button">Cancel</button>
         <button class="rz-btn rz-btn--ghost" type="button">Dismiss</button>
         <button class="rz-btn rz-btn--danger" type="button">Delete</button>
+        <button class="rz-btn rz-btn--danger-outlined" type="button">Delete bill</button>
+        <button class="rz-btn rz-btn--danger-quiet" type="button">Remove</button>
       </div>
       <div class="rz-row" style="margin-top:var(--rz-space-3)">
         <button class="rz-btn rz-btn--sm" type="button">Small</button>
@@ -139,9 +141,23 @@
         <button class="rz-btn rz-btn--lg" type="button">Touch target</button>
         <button class="rz-btn" type="button" disabled>Disabled</button>
         <button class="rz-btn rz-btn--secondary" type="button" disabled>Disabled</button>
+        <button class="rz-btn rz-btn--danger-outlined" type="button" disabled>Disabled</button>
+        <button class="rz-btn rz-btn--danger-quiet" type="button" disabled>Disabled</button>
       </div>
       <p class="rz-small" style="margin-top:var(--rz-space-3)">Tab through these — the focus ring
-      is identical on every one, and sits outside the element.</p>
+      is identical on every one, and sits outside the element. Three volumes of destructive: the
+      fill for a dialog that exists only to confirm it, the outline for the destructive choice in
+      an inline confirmation, and Remove beside content, with the critical tint only under the
+      pointer.</p>
+    </div>
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- An inline confirmation, the outlined button's job: the safe choice first,
+           the destructive one marked by its border rather than a fill. -->
+      <p style="margin:0 0 var(--rz-space-3)"><strong>Delete Old gym for good?</strong></p>
+      <div class="rz-row">
+        <button class="rz-btn rz-btn--secondary" type="button">Keep it</button>
+        <button class="rz-btn rz-btn--danger-outlined" type="button">Delete bill</button>
+      </div>
     </div>
   </section>
 
@@ -188,20 +204,44 @@
         </div>
       </div>
     </div>
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- An input, a select and a button in one row. Until v0.4.0 the input sat
+           2px taller than the other two and, told to fill its container, ran 18px
+           past it. If their edges stop lining up, .rz-field has lost border-box. -->
+      <div class="rz-row">
+        <input class="rz-field" aria-label="Paid on" type="date" value="2026-09-12" style="width:auto;flex:1 1 140px">
+        <input class="rz-field" aria-label="Amount" value="138.42" inputmode="decimal" style="width:auto;flex:1 1 140px">
+        <select class="rz-field" aria-label="Category" style="width:auto;flex:1 1 140px"><option>Utilities</option><option>Housing</option></select>
+        <button class="rz-btn" type="button">Record</button>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">One height across the row: the
+      input, the select and the button are each 32px tall, measured to the outer edge, and every
+      field above stops at its card's edge.</p>
+    </div>
   </section>
 
   <section>
     <h2>Status</h2>
     <div class="rz-card">
       <div class="rz-row">
-        <span class="rz-badge rz-badge--good"><span aria-hidden="true">&#10003;</span> On track</span>
-        <span class="rz-badge rz-badge--caution"><span aria-hidden="true">&#9650;</span> Getting tight</span>
-        <span class="rz-badge rz-badge--critical"><span aria-hidden="true">&#9888;</span> No margin</span>
-        <span class="rz-badge rz-badge--neutral"><span aria-hidden="true">&#9675;</span> Just started</span>
+        <span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> On track</span>
+        <span class="rz-badge rz-badge--caution"><span class="rz-badge__icon" aria-hidden="true">&#9650;</span> Getting tight</span>
+        <span class="rz-badge rz-badge--critical"><span class="rz-badge__icon" aria-hidden="true">&#9888;</span> No margin</span>
+        <span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#9675;</span> Just started</span>
+      </div>
+      <!-- Stacked, so the slot's one job shows: every label starts on one line
+           whatever the glyph's width. The last icon is an inline SVG, sized by
+           the slot and coloured by the badge. -->
+      <div class="rz-stack" style="align-items:flex-start;gap:var(--rz-space-2);margin-top:var(--rz-space-3)">
+        <span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> Paid</span>
+        <span class="rz-badge rz-badge--caution"><span class="rz-badge__icon" aria-hidden="true">&#9650;</span> Due in 3 days</span>
+        <span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#9675;</span> Not due yet</span>
+        <span class="rz-badge rz-badge--critical"><span class="rz-badge__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1.5 15.2 14.5H.8z" fill="currentColor"/><path d="M8 6v3.8" stroke="var(--rz-crit-bg)" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12" r="1" fill="var(--rz-crit-bg)"/></svg></span> Overdue</span>
       </div>
       <p class="rz-small" style="margin-top:var(--rz-space-3)">The icon shape and the label are the
       encoding. Colour reinforces — no green/amber/red trio stays distinguishable under
-      deuteranopia at legible contrast.</p>
+      deuteranopia at legible contrast. Each icon sits in a 1em square, so stacked badges start
+      their labels on one line.</p>
 
       <div class="rz-stack" style="margin-top:var(--rz-space-4)">
         <div class="rz-alert rz-alert--critical" role="alert">
@@ -237,6 +277,72 @@
         </table>
       </div>
     </div>
+
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- Rows that hold controls. The closed row has no Edit button and must
+           still be exactly as tall as the rows that do. -->
+      <div class="rz-table-wrap">
+        <table class="rz-table rz-table--controls" id="table-controls">
+          <caption class="rz-sr-only">Payments this month, with controls in each row</caption>
+          <thead>
+            <tr><th><span class="rz-sr-only">Paid</span></th><th>Date</th><th>Bill</th><th class="rz-num">Amount</th><th><span class="rz-sr-only">Actions</span></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><input class="rz-check" type="checkbox" checked aria-label="Rent paid"></td><td>Sep&nbsp;01</td><td>Rent</td><td class="rz-num">2,150.00</td><td class="rz-num"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Rent">Edit</button></td></tr>
+            <tr><td><input class="rz-check" type="checkbox" checked aria-label="Car payment paid"></td><td>Sep&nbsp;05</td><td>Car payment</td><td class="rz-num">412.88</td><td class="rz-num"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Car payment">Edit</button></td></tr>
+            <tr><td><input class="rz-check" type="checkbox" aria-label="Electric paid"></td><td>Sep&nbsp;12</td><td>Electric</td><td class="rz-num">138.42</td><td class="rz-num"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Electric">Edit</button></td></tr>
+            <tr class="is-muted"><td></td><td>Sep&nbsp;15</td><td>Old gym <span class="rz-badge rz-badge--neutral">Closed</span></td><td class="rz-num">0.00</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)"><code>rz-table--controls</code>:
+      every row is 40px, a 32px control with 4px above and below, so the closed row with no Edit
+      button lines up with the rows that have one.</p>
+    </div>
+
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- Nothing in this table is focusable, so when it scrolls sideways (a
+           narrow screen, or the page zoomed) the wrap is what the keyboard
+           scrolls. It needs tabindex, a role and a name to be reachable. -->
+      <div class="rz-table-wrap" tabindex="0" role="region" aria-labelledby="table-reading-name">
+        <table class="rz-table rz-table--reading" id="table-reading">
+          <caption class="rz-sr-only" id="table-reading-name">Recorded balances, newest first</caption>
+          <thead>
+            <tr><th>Recorded</th><th class="rz-num">Bank showed</th><th class="rz-num">Expected</th><th class="rz-num">Difference</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Sep&nbsp;30</td><td class="rz-num">4,212.50</td><td class="rz-num">4,212.50</td><td class="rz-num">0.00</td><td><span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> Matched</span></td></tr>
+            <tr><td>Sep&nbsp;23</td><td class="rz-num">4,590.18</td><td class="rz-num">4,577.68</td><td class="rz-num">12.50 more</td><td><span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#8800;</span> Didn&rsquo;t match</span></td></tr>
+            <tr><td>Sep&nbsp;16</td><td class="rz-num">3,904.07</td><td class="rz-num">3,904.07</td><td class="rz-num">0.00</td><td><span class="rz-badge rz-badge--good"><span class="rz-badge__icon" aria-hidden="true">&#10003;</span> Matched</span></td></tr>
+            <tr><td>Sep&nbsp;09</td><td class="rz-num">5,128.33</td><td class="rz-num">5,140.33</td><td class="rz-num">12.00 less</td><td><span class="rz-badge rz-badge--neutral"><span class="rz-badge__icon" aria-hidden="true">&#8800;</span> Didn&rsquo;t match</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)"><code>rz-table--reading</code>:
+      headers set as words rather than labels, every row ruled off with the last one included, and
+      the text inset from both ends of each rule.</p>
+    </div>
+
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <div class="rz-table-wrap">
+        <table class="rz-table rz-table--reading rz-table--controls" id="table-both">
+          <caption class="rz-sr-only">Bills, with what each costs a month</caption>
+          <thead>
+            <tr><th>Name</th><th>Repeats</th><th>Next</th><th class="rz-num">Amount</th><th><span class="rz-sr-only">Actions</span></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Rent</td><td>Monthly on the 1st</td><td>Oct&nbsp;01</td><td class="rz-num">2,150.00</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Rent">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Rent">Remove</button></div></td></tr>
+            <tr><td>Car payment</td><td>Monthly on the 5th</td><td>Oct&nbsp;05</td><td class="rz-num">412.88</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Car payment">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Car payment">Remove</button></div></td></tr>
+            <tr><td>Electric</td><td>Monthly on the 12th</td><td>Oct&nbsp;12</td><td class="rz-num">138.42</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Electric">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Electric">Remove</button></div></td></tr>
+            <tr><td>Water</td><td>Monthly on the 20th</td><td>Oct&nbsp;20</td><td class="rz-num">48.20</td><td class="rz-num"><div class="rz-row" style="justify-content:flex-end;flex-wrap:nowrap"><button class="rz-btn rz-btn--secondary" type="button" aria-label="Edit Water">Edit</button><button class="rz-btn rz-btn--danger-quiet" type="button" aria-label="Remove Water">Remove</button></div></td></tr>
+            <tr class="rz-total"><td colspan="3">A month</td><td class="rz-num">2,749.50</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">Both together, as a list of bills
+      with its actions: reading rows at the controls' height, and a quiet Remove beside each row
+      that does not outrank it.</p>
+    </div>
   </section>
 
   <section>
@@ -251,6 +357,27 @@
       </div>
       <p class="rz-small" style="margin-top:var(--rz-space-4)">Focus sits outside the box, selected
       is on it, current is inside it — so all three can be true at once and each stays readable.</p>
+    </div>
+    <div class="rz-card" style="margin-top:var(--rz-space-4)">
+      <!-- The right-hand group restates only the accent, as ink, the way a theme
+           with an ink-filled primary button does. --rz-focus was resolved on :root
+           and is inherited as that colour, so the ring stays on its own token.
+           Until v0.4.0 the ring read --rz-accent here and turned the colour of the
+           text. A theme that restates the accent on :root itself must restate
+           --rz-focus there too, or the default alias follows the new accent. -->
+      <div class="rz-row" style="gap:var(--rz-space-8)">
+        <div class="rz-row">
+          <button class="rz-btn" type="button" id="focus-default">Save</button>
+          <input class="rz-field" aria-label="Note, default accent" value="Rent" style="width:160px">
+        </div>
+        <div class="rz-row" style="--rz-accent:var(--rz-ink);--rz-on-accent:var(--rz-surface)">
+          <button class="rz-btn" type="button" id="focus-ink">Save</button>
+          <input class="rz-field" aria-label="Note, ink accent" value="Rent" style="width:160px">
+        </div>
+      </div>
+      <p class="rz-small" style="margin-top:var(--rz-space-3)">The ring has its own colour. On the
+      left it is the accent, as it always was. On the right the accent is ink, and the ring keeps
+      its colour rather than turning the colour of the text. Tab through both groups.</p>
     </div>
   </section>
 
